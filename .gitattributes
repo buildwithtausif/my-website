@@ -1,0 +1,22 @@
+*.js  linguist-language=JavaScript
+*.mjs linguist-language=JavaScript
+*.ts  linguist-language=TypeScript
+*.json linguist-language=JavaScript
+*.html linguist-detectable=false
+*.css linguist-detectable=false
+# Minified / lock files
+*.min.js  -diff linguist-generated=true
+*.min.css -diff linguist-generated=true
+*.lock    -diff
+package-lock.json -diff linguist-generated=true
+# Binary files
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.mp3  binary
+*.mp4  binary
+*.pdf  binary
+#  build_folder
+public/* linguist-generated=true
+dist/*   linguist-generated=true
