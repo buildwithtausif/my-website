@@ -1,0 +1,35 @@
+---
+import '../styles/global.css'
+---
+<div class="nav sticky top-2.5 flex items-center md:items-start">
+    <ul class="flex gap-1.5 m-2.5 rounded-xs">
+        <li>bsh</li>
+        <li><a href="#">[H] home</a></li>
+        <li><a href="#">[B] Blog</a></li>
+        <li><a href="#">[P] Projects</a></li>
+        <li><a href="#">[O] Oasis</a></li>
+    </ul>
+</div>
+<style>
+    .nav ul li{
+        text-decoration: none;
+        font-family: var(--font-mono);
+        text-transform: capitalize;
+        padding: 2.5px 5px;
+        background-color: --alpha(var(--color-stone-600) / 65%);
+        backdrop-filter: blur(2.5px);
+        color: var(--color-zinc-200);
+        border-radius: var(--radius-xs);
+        font-size: var(--text-sm);
+        cursor: pointer;
+    }
+    .nav ul li:nth-child(1) {
+        background-color: var(--color-lime-400);
+        color: var(--color-slate-900);
+        text-transform: lowercase;
+    }
+    .nav ul li:hover:not(:nth-child(1)) {
+        background-color: --alpha(var(--color-lime-400) / 65%);
+        color:  var(--color-white);
+    }
+</style>
