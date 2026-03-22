@@ -32,19 +32,28 @@ const canonical = new URL(Astro.url.pathname, domain).toString();
   </head>
   <body class="min-h-screen scanline-bg">
     <Navigation />
-    <slot />
+    <slot name="brief"/>
+	<slot name="glance-for-skills"/>
   </body>
 </html>
 <style is:global>
   /* Global or Component Styles */
   .scanline-bg {
+    position: relative;
+    background-color: #0a0a0a; /* Dark base color */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .scanline-bg::before {
+    content: "";
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1; /* Stay behind content */
-    background-color: #0a0a0a; /* Dark base color */
+    z-index: -1;
+    pointer-events: none;
 
     /* Create the horizontal lines */
     background-image: linear-gradient(

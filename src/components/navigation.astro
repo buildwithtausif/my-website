@@ -1,13 +1,16 @@
 ---
 import '../styles/global.css'
 ---
-<div class="nav sticky top-2.5 flex items-center md:items-start">
-    <ul class="flex gap-1.5 m-2.5 rounded-xs">
+<div class="nav sticky top-2.5 grid grid-cols-none md:grid-flow-col md:grid-cols-1">
+    <ul class="flex flex-wrap gap-1.5 m-2.5 rounded-xs">
         <li>bsh</li>
         <li><a href="#">[H] home</a></li>
         <li><a href="#">[B] Blog</a></li>
         <li><a href="#">[P] Projects</a></li>
         <li><a href="#">[O] Oasis</a></li>
+    </ul>
+    <ul class="md:flex md:gap-1.5 m-2.5 rounded-xs hidden">
+        <li class="capitalize">[C] console</li>
     </ul>
 </div>
 <style>
@@ -23,12 +26,12 @@ import '../styles/global.css'
         font-size: var(--text-sm);
         cursor: pointer;
     }
-    .nav ul li:nth-child(1) {
+    .nav ul li:nth-child(1):not(.nav ul:nth-child(2) li) {
         background-color: var(--color-lime-400);
         color: var(--color-slate-900);
         text-transform: lowercase;
     }
-    .nav ul li:hover:not(:nth-child(1)) {
+    .nav ul li:not(:nth-child(1)):hover, .nav ul:nth-child(2) li:hover  {
         background-color: --alpha(var(--color-lime-400) / 65%);
         color:  var(--color-white);
     }
