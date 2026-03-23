@@ -1,0 +1,13 @@
+---
+import { getCollection } from "astro:content";
+import BlogLayout from "../layouts/blogLayout.astro";
+// we'll sort according to the latest publishing date
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+// console.log(posts.map(post => (post.data.tags)))
+---
+
+<BlogLayout>
+  
+</BlogLayout>

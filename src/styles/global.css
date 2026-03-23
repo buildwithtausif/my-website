@@ -1,1 +1,42 @@
 @import "tailwindcss";
+.scanline-bg {
+    position: relative;
+    background-color: #0a0a0a; /* Dark base color */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .scanline-bg::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+
+    /* Create the horizontal lines */
+    background-image: linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 2px,
+      rgba(255, 255, 255, 0.03) 3px,
+      /* Very faint white line */ transparent 4px
+    );
+
+    /* Set the size of each "row" */
+    background-size: 100% 4px;
+
+    /* The Secret Sauce: Animation */
+    animation: move-lines 300ms linear infinite;
+  }
+
+  @keyframes move-lines {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 0 100%;
+    }
+  }

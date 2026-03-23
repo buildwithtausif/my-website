@@ -3,19 +3,17 @@ import "../styles/global.css";
 import Navigation from "@components/navigation.astro";
 // metadata
 interface Props {
-  title: string;
-  desc?: string;
-  keywords?: string;
-  domain?: string;
+  title: string,
+  desc?: string,
+  keywords?: string,
 }
 
 const {
   title = "Tausif Alam | Full Stack Developer",
   desc = "developing scalable systems for every business needs, I'm a full stack developer specializing in Node.js and Go (Programming Language) and related frameworks.",
-  keywords = "Tausif Alam, Tausif Alam portfolio, full stack developer, Node.js developer, Golang developer, backend developer, web developer, system design, freelancer",
-  domain = "https://buildwithtausif.in",
+  keywords = "Tausif Alam, Tausif Alam portfolio, full stack developer, Node.js developer, Golang developer, backend developer, web developer, system design, freelancer"
 } = Astro.props as Props;
-const canonical = new URL(Astro.url.pathname, domain).toString();
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <html lang="en">
@@ -36,47 +34,3 @@ const canonical = new URL(Astro.url.pathname, domain).toString();
 	<slot name="glance-for-skills"/>
   </body>
 </html>
-<style is:global>
-  /* Global or Component Styles */
-  .scanline-bg {
-    position: relative;
-    background-color: #0a0a0a; /* Dark base color */
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .scanline-bg::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    pointer-events: none;
-
-    /* Create the horizontal lines */
-    background-image: linear-gradient(
-      to bottom,
-      transparent 0px,
-      transparent 2px,
-      rgba(255, 255, 255, 0.03) 3px,
-      /* Very faint white line */ transparent 4px
-    );
-
-    /* Set the size of each "row" */
-    background-size: 100% 4px;
-
-    /* The Secret Sauce: Animation */
-    animation: move-lines 300ms linear infinite;
-  }
-
-  @keyframes move-lines {
-    from {
-      background-position: 0 0;
-    }
-    to {
-      background-position: 0 100%;
-    }
-  }
-</style>

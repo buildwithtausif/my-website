@@ -1,0 +1,44 @@
+---
+import "../styles/global.css"
+import Navigation from "@components/navigation.astro"
+import { getCollection } from "astro:content"
+// metadata for seo
+interface Props {
+    title?: string,
+    desc?: string,
+    keywords?: string
+}
+const { 
+        title = "Blog | more than just a blog by buildwithtausif", 
+        desc = "This is my thought dump and I share everything I come across days, so expect no limitation of content coverage, mostly I'll right about tech, books, philosophy" , 
+        keywords = "buildwithtausif, developer blog, dev blog, tausif's blog"
+} = Astro.props as Props;
+// canonnical url for seo
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+
+// getting the article count
+const blog = await getCollection('blog');
+const articleCount = blog.length;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="canonical" href={canonical} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={desc} />
+    <meta name="keywords" content={keywords} />
+    <title>{title}</title>
+  </head>
+  <body class="scanline-bg">
+    <Navigation/>
+    <h1 class="text-4xl text-white font-mono p-2.5">Articles<sup>({articleCount})</sup></h1>
+    <div class="content-wrapper min-h-screen flex flex-col md:flex-row my-5">
+      <slot name="tags"/>
+      <slot name="bloglist"/>
+    </div>
+  </body>
+</html>
