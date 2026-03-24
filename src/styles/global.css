@@ -1,4 +1,8 @@
 @import "tailwindcss";
+::selection {
+  background: var(--color-lime-400);
+  color: var(--color-stone-900)
+}
 .scanline-bg {
     position: relative;
     background-color: #0a0a0a; /* Dark base color */

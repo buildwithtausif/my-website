@@ -15,10 +15,6 @@ const {
 } = Astro.props as Props;
 // canonnical url for seo
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
-
-// getting the article count
-const blog = await getCollection('blog');
-const articleCount = blog.length;
 ---
 
 <html lang="en">
@@ -35,10 +31,8 @@ const articleCount = blog.length;
   </head>
   <body class="scanline-bg">
     <Navigation/>
-    <h1 class="text-4xl text-white font-mono p-2.5">Articles<sup>({articleCount})</sup></h1>
-    <div class="content-wrapper min-h-screen flex flex-col md:flex-row my-5">
-      <slot name="tags"/>
-      <slot name="bloglist"/>
+    <div class="content-wrapper w-full min-h-screen">
+      <slot />
     </div>
   </body>
 </html>

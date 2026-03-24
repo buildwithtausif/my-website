@@ -1,13 +1,160 @@
 ---
 import { getCollection } from "astro:content";
 import BlogLayout from "../layouts/blogLayout.astro";
-// we'll sort according to the latest publishing date
+import { Check, Folder } from "lucide-react";
+
+// sort according to the latest publishing date
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
-// console.log(posts.map(post => (post.data.tags)))
+const articleCount = posts.length;
+
+// Extract all tags and count them
+const tagsCount = posts.reduce((acc, post) => {
+  if (post.data.tags) {
+    post.data.tags.forEach(tag => {
+      acc[tag] = (acc[tag] || 0) + 1;
+    });
+  }
+  return acc;
+}, {} as Record<string, number>);
+
+const sortedTags = Object.entries(tagsCount).sort((a, b) => a[0].localeCompare(b[0]));
 ---
 
 <BlogLayout>
-  
+  <!-- Full wrapper for exactly matching design aesthetics -->
+  <div class="max-w-310 mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-24 font-sans text-neutral-300">
+    
+    <!-- Header row -->
+    <div class="mb-5 flex items-start">
+      <h1 class="text-6xl md:text-[5.5rem] font-normal tracking-tight text-neutral-100 capitalize">
+        Blogs
+      </h1>
+      <sup class="text-sm md:text-lg font-normal mt-3 ml-2 text-neutral-400">(<span id="article-count">{articleCount}</span>)</sup>
+    </div>
+
+    <!-- Top Border Line -->
+    <div class="border-t border-[#333]"></div>
+
+    <!-- Desktop Grid Headers -->
+    <div class="hidden md:grid grid-cols-[250px_150px_1fr] lg:grid-cols-[280px_150px_1fr] gap-6 text-[10px] sm:text-xs tracking-wider text-neutral-400 uppercase">
+      <div class="py-3">/ Filters</div>
+      <div class="py-3">/ Date</div>
+      <div class="py-3">/ Name</div>
+    </div>
+    
+    <!-- Mobile Filter Header -->
+    <div class="md:hidden text-[10px] tracking-wider text-neutral-400 py-3 uppercase">
+      / Filters
+    </div>
+
+    <!-- Inner divider border (separates headers from content) -->
+    <div class="border-t border-[#333]"></div>
+
+    <!-- Main Content Grid -->
+    <div class="flex flex-col md:grid md:grid-cols-[250px_150px_1fr] lg:grid-cols-[280px_150px_1fr] md:gap-6 mt-0">
+      
+      <!-- Left Sidebar: Filters -->
+      <div class="md:col-span-1 shrink-0">
+        <!-- Desktop/Mobile Container -->
+        <div class="flex flex-row md:flex-col items-center md:items-start border-b md:border-b-0 border-[#333] pt-4 md:pt-4 pb-4 md:pb-0">
+          
+          <!-- Folder Header -->
+          <div class="flex items-center text-neutral-200 text-[15px] md:text-sm md:mb-5 font-normal tracking-wide shrink-0 border-r border-[#333] md:border-r-0 pr-5 md:pr-0 mr-5 md:mr-0 h-full">
+            <!-- Folder Icon SVG -->
+            <Folder size={15} strokeWidth={3.5}/> <span class="ml-2">Topics</span>
+          </div>
+
+          <!-- Filter list -->
+          <div class="flex flex-row md:flex-col overflow-x-auto md:overflow-visible gap-6 md:gap-2.5 scrollbar-hide w-full text-[14px] md:text-[13px] text-neutral-400 md:text-neutral-500 font-normal md:font-light">
+            {sortedTags.map(([tag, count]) => (
+              <label class="flex items-center cursor-pointer group shrink-0 w-auto">
+                <input type="checkbox" value={tag.toLowerCase()} class="hidden peer tag-filter" />
+                <div class="hidden md:flex items-center justify-center w-3.5 h-3.5 border border-[#444] rounded-[3px] mr-2 shrink-0 group-hover:border-[#666] transition-colors peer-checked:border-neutral-400 text-transparent peer-checked:text-neutral-300">
+                  <Check size={10} strokeWidth={3.5} />
+                </div>
+                <span class="group-hover:text-neutral-200 font-normal transition-colors peer-checked:bg-lime-400 peer-checked:text-stone-900 peer-checked:font-medium capitalize">{tag} ({count})</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Area: Articles List -->
+      <div class="md:col-span-2 col-span-1 flex flex-col pt-0 md:pt-0" id="articles-list">
+        {posts.map((post) => (
+          <a 
+            href={`/blog/${post.id}`} 
+            class="article-card group block border-b border-[#333] last:border-b-0 hover:bg-white/2 transition-colors relative px-2 -mx-2 md:mx-0 md:px-0"
+            data-tags={post.data.tags ? post.data.tags.map(t => t.toLowerCase()).join(',') : ''}
+          >
+            
+            <!-- Desktop Layout -->
+            <div class="hidden md:grid grid-cols-[150px_1fr] gap-6 items-center py-5">
+              
+              <!-- Date -->
+              <div class="text-[13px] text-neutral-300 font-mono tracking-tight flex items-center h-full">
+                <!-- White square bullet -->
+                <div class="w-1.25 h-1.25 bg-neutral-300 mr-2.5 shrink-0"></div>
+                {post.data.pubDate.toISOString().split('T')[0].replace(/-/g, '.')}
+              </div>
+
+              <!-- Title -->
+              <div class="text-[19px] lg:text-[21px] text-neutral-200 font-normal tracking-tight pr-6 relative truncate transition-transform duration-300 group-hover:translate-x-1 font-sans">
+                {post.data.title}
+              </div>
+            </div>
+
+            <!-- Mobile Layout -->
+            <div class="md:hidden flex flex-col py-4 relative group-hover:bg-white/2 px-1">
+              <!-- Date -->
+              <div class="text-[11px] text-neutral-300 font-mono tracking-tighter flex items-center mb-1.5">
+                <div class="w-1.5 h-1.5 bg-neutral-300 mr-2 shrink-0"></div>
+                {post.data.pubDate.toISOString().split('T')[0].replace(/-/g, '.')}
+              </div>
+              
+              <!-- Title -->
+              <div class="text-[18px] text-neutral-100 font-normal leading-tight pr-8">
+                {post.data.title}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+      
+    </div>
+  </div>
 </BlogLayout>
+
+<script>
+  const filters = document.querySelectorAll('.tag-filter');
+  const articles = document.querySelectorAll('.article-card');
+  const countSpan = document.getElementById('article-count');
+
+  filters.forEach(filter => {
+    filter.addEventListener('change', () => {
+      const selectedTags = Array.from(filters)
+        .filter(f => (f as HTMLInputElement).checked)
+        .map(f => (f as HTMLInputElement).value);
+
+      let visibleCount = 0;
+
+      articles.forEach(article => {
+        const articleTags = (article.getAttribute('data-tags') || '').split(',');
+        const isVisible = selectedTags.length === 0 || selectedTags.some(tag => articleTags.includes(tag));
+        
+        if (isVisible) {
+          (article as HTMLElement).style.display = '';
+          visibleCount++;
+        } else {
+          (article as HTMLElement).style.display = 'none';
+        }
+      });
+
+      if (countSpan) {
+        countSpan.textContent = visibleCount.toString();
+      }
+    });
+  });
+</script>
