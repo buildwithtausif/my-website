@@ -31,8 +31,13 @@ const { Content } = await render(post);
     <div
       class="rendered-content-wrapper flex flex-col md:flex-row relative items-start my-2.5 gap-4"
     >
-      <div class="metadata font-mono text-zinc-400 min-w-45 md:sticky md:top-20">
-        by <span>{post.data.author} <br/> On: {post.data.pubDate.toISOString().slice(0, 10)}</span>
+      <div
+        class="metadata font-mono text-zinc-400 min-w-45 md:sticky md:top-20"
+      >
+        by <span
+          >{post.data.author}
+          <br /> On: {post.data.pubDate.toISOString().slice(0, 10)}</span
+        >
       </div>
       <div class="content min-w-[80%] prose prose-invert lg:prose-xl">
         <Content />

@@ -1,8 +1,12 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@theme {
+  --font-momo: "Momo Signature", cursive;
+  --font-inter: "Inter", sans-serif;
+}
+
 body {
-  box-sizing: border-box;
   overflow-x: hidden;
   scroll-behavior: smooth;
 }
