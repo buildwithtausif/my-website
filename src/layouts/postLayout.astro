@@ -1,7 +1,6 @@
 ---
 import "../styles/global.css"
 import Navigation from "@components/navigation.astro"
-// metadata for seo
 interface Props {
     title?: string,
     desc?: string,
@@ -12,7 +11,6 @@ const {
         desc = "This is my thought dump and I share everything I come across days, so expect no limitation of content coverage, mostly I'll right about tech, books, philosophy" , 
         keywords = "buildwithtausif, developer blog, dev blog, tausif's blog"
 } = Astro.props as Props;
-// canonnical url for seo
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 

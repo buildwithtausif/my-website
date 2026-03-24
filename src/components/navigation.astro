@@ -1,11 +1,11 @@
 ---
 import '../styles/global.css'
 ---
-<div class="nav sticky top-2.5 grid grid-cols-none md:grid-flow-col md:grid-cols-1">
+<div class="nav z-50 sticky top-2.5 grid grid-cols-none md:grid-flow-col md:grid-cols-1">
     <ul class="flex flex-wrap gap-1.5 m-2.5 rounded-xs">
         <li class="font-black">bsh</li>
         <li><a href={Astro.site}>[H] home</a></li>
-        <li><a href="./blog">[B] Blog</a></li>
+        <li><a href={Astro.site + "./blog"}>[B] Blog</a></li>
         <li><a href="#">[P] Projects</a></li>
         <li><a href="#">[O] Oasis</a></li>
     </ul>

@@ -1,0 +1,42 @@
+---
+import type { GetStaticPaths } from "astro";
+import "@styles/global.css";
+import PostLayout from "@layouts/postLayout.astro";
+import { getCollection, render } from "astro:content";
+import createSlug from "@utils/createSlug";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: createSlug(post.data.title) },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<PostLayout
+  title={post.data.title}
+  desc={post.data.description}
+  keywords={post.data.tags.join(", ")}
+>
+  <div
+    class="max-w-310 px-4 mx-auto sm:px-6 lg:px-8 mt-12 mb-24 font-sans text-neutral-100"
+  >
+    <h1 class="text-2xl md:text-6xl text-neutral-100 font-mono">
+      {post.data.title}
+    </h1>
+    <div
+      class="rendered-content-wrapper flex flex-col md:flex-row relative items-start my-2.5 gap-4"
+    >
+      <div class="metadata font-mono text-zinc-400 min-w-45 md:sticky md:top-20">
+        by <span>{post.data.author} <br/> On: {post.data.pubDate.toISOString().slice(0, 10)}</span>
+      </div>
+      <div class="content min-w-[80%] prose prose-invert lg:prose-xl">
+        <Content />
+      </div>
+    </div>
+  </div>
+</PostLayout>

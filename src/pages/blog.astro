@@ -1,7 +1,8 @@
 ---
 import { getCollection } from "astro:content";
-import BlogLayout from "../layouts/blogLayout.astro";
+import BlogLayout from "@layouts/blogLayout.astro";
 import { Check, Folder } from "lucide-react";
+import createSlug from "@utils/createSlug";
 
 // sort according to the latest publishing date
 const posts = (await getCollection("blog")).sort(
@@ -85,7 +86,7 @@ const sortedTags = Object.entries(tagsCount).sort((a, b) => a[0].localeCompare(b
       <div class="md:col-span-2 col-span-1 flex flex-col pt-0 md:pt-0" id="articles-list">
         {posts.map((post) => (
           <a 
-            href={`/blog/${post.id}`} 
+            href={`/blog/${createSlug(post.data.title)}/`} 
             class="article-card group block border-b border-[#333] last:border-b-0 hover:bg-white/2 transition-colors relative px-2 -mx-2 md:mx-0 md:px-0"
             data-tags={post.data.tags ? post.data.tags.map(t => t.toLowerCase()).join(',') : ''}
           >
