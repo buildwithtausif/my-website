@@ -3,13 +3,13 @@ import { getCollection } from "astro:content";
 import BlogLayout from "@layouts/blogLayout.astro";
 import { Check, Folder } from "lucide-react";
 import createSlug from "@utils/createSlug";
+import countReadingMinutes from "@utils/readingMin";
 
 // sort according to the latest publishing date
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 const articleCount = posts.length;
-
 // Extract all tags and count them
 const tagsCount = posts.reduce((acc, post) => {
   if (post.data.tags) {
@@ -94,11 +94,11 @@ const sortedTags = Object.entries(tagsCount).sort((a, b) => a[0].localeCompare(b
             <!-- Desktop Layout -->
             <div class="hidden md:grid grid-cols-[150px_1fr] gap-6 items-center py-5">
               
-              <!-- Date -->
+              <!-- Date & Reading Time -->
               <div class="text-[13px] text-neutral-300 font-mono tracking-tight flex items-center h-full">
                 <!-- White square bullet -->
                 <div class="w-1.25 h-1.25 bg-neutral-300 mr-2.5 shrink-0"></div>
-                {post.data.pubDate.toISOString().split('T')[0].replace(/-/g, '.')}
+                {post.data.pubDate.toISOString().split('T')[0].replace(/-/g, '.')} <br/> {countReadingMinutes(post.body?.match(/\S+/g)?.length || 0)} min read
               </div>
 
               <!-- Title -->
@@ -109,10 +109,10 @@ const sortedTags = Object.entries(tagsCount).sort((a, b) => a[0].localeCompare(b
 
             <!-- Mobile Layout -->
             <div class="md:hidden flex flex-col py-4 relative group-hover:bg-white/2 px-1">
-              <!-- Date -->
+              <!-- Date & Reading Time -->
               <div class="text-[11px] text-neutral-300 font-mono tracking-tighter flex items-center mb-1.5">
                 <div class="w-1.5 h-1.5 bg-neutral-300 mr-2 shrink-0"></div>
-                {post.data.pubDate.toISOString().split('T')[0].replace(/-/g, '.')}
+                {post.data.pubDate.toISOString().split('T')[0].replace(/-/g, '.')} &nbsp;&bull;&nbsp; {countReadingMinutes(post.body?.match(/\S+/g)?.length || 0)} min read
               </div>
               
               <!-- Title -->

@@ -4,6 +4,7 @@ import "@styles/global.css";
 import PostLayout from "@layouts/postLayout.astro";
 import { getCollection, render } from "astro:content";
 import createSlug from "@utils/createSlug";
+import countReadingMinutes from "@utils/readingMin";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -36,7 +37,8 @@ const { Content } = await render(post);
       >
         by <span
           >{post.data.author}
-          <br /> On: {post.data.pubDate.toISOString().slice(0, 10)}</span
+          <br /> On: {post.data.pubDate.toISOString().slice(0, 10)}
+          <br /> {countReadingMinutes(post.body?.match(/\S+/g)?.length || 0)} min read</span
         >
       </div>
       <div class="content min-w-[80%] prose prose-invert lg:prose-xl">
