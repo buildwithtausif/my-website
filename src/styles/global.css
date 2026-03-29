@@ -188,3 +188,23 @@ body {
     @apply font-sans;
   }
 }
+
+/* GitHub heatmap custom scrollbar */
+.githubHeatMap {
+  scrollbar-width: thin;
+  scrollbar-color: #26a641 transparent;
+}
+.githubHeatMap::-webkit-scrollbar {
+  height: 6px;
+}
+.githubHeatMap::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 3px;
+}
+.githubHeatMap::-webkit-scrollbar-thumb {
+  background: #26a641;
+  border-radius: 3px;
+}
+.githubHeatMap::-webkit-scrollbar-thumb:hover {
+  background: #39d353;
+}

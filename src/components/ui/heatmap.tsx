@@ -351,7 +351,7 @@ export default function Heatmap(props: HeatmapProps) {
       style={{
         gap,
         gridTemplateColumns: `max-content repeat(${weeks.length}, ${cellSize}px)`,
-        gridTemplateRows: `repeat(8, ${cellSize}px)`
+        gridTemplateRows: `auto repeat(7, ${cellSize}px)`
       }}
       {...safeProps}
     >
