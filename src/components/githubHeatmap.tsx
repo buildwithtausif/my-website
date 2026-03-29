@@ -1,5 +1,2 @@
-export default async function GithubHeatMap() {
-    return (
-        <p className="text-white"></p>
-    );
-}
+import getGithubContributions from "@utils/githubGraphReq";
+
