@@ -52,7 +52,7 @@ export default function GithubHeatmap({ data }: GithubHeatmapProps) {
         <span className="text-sm font-mono text-lime-400 animate-pulse">
           Loading Contributions...
         </span>
-        <Progress value={progress} className="h-1.5 bg-[#161b22] [&>[data-slot=progress-indicator]]:bg-lime-400" />
+        <Progress value={progress} className="h-1.5 bg-[#161b22] *:data-[slot=progress-indicator]:bg-lime-400" />
       </div>
     );
   }

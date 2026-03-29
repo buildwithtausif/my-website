@@ -6,10 +6,6 @@
 @custom-variant dark (&:is(.dark *));
 @plugin "@tailwindcss/typography";
 
-@theme {
-  --font-momo: "Momo Signature", cursive;
-  --font-inter: "Inter", sans-serif;
-}
 
 body {
   overflow-x: hidden;
