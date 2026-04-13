@@ -3,15 +3,15 @@ import "../styles/global.css";
 import Navigation from "@components/navigation.astro";
 // metadata
 interface Props {
-  title: string,
-  desc?: string,
-  keywords?: string,
+  title: string;
+  desc?: string;
+  keywords?: string;
 }
 
 const {
   title = "Tausif Alam | Full Stack Developer",
   desc = "developing scalable systems for every business needs, I'm a full stack developer specializing in Node.js and Go (Programming Language) and related frameworks.",
-  keywords = "Tausif Alam, Tausif Alam portfolio, full stack developer, Node.js developer, Golang developer, backend developer, web developer, system design, freelancer"
+  keywords = "Tausif Alam, Tausif Alam portfolio, full stack developer, Node.js developer, Golang developer, backend developer, web developer, system design, freelancer",
 } = Astro.props as Props;
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
@@ -30,7 +30,26 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
   </head>
   <body class="min-h-screen scanline-bg">
     <Navigation />
-    <slot name="brief"/>
-	  <slot name="githubHeatMap"/>
+    <!-- Twitter-style 3-column grid -->
+    <div class="mx-auto flex flex-col lg:flex-row w-full max-w-[1265px] min-h-screen px-4 sm:px-6 lg:px-0">
+
+      <!-- Left Sidebar — nav/icons (hidden below xl) -->
+      <aside class="hidden xl:flex xl:flex-col xl:w-[275px] xl:shrink-0 sticky top-0 h-screen overflow-y-auto">
+        <slot name="leftSidebar" />
+      </aside>
+
+      <!-- Middle Column — main feed -->
+      <main class="flex-1 min-w-0 lg:border-x lg:border-white/10 pb-6 lg:pb-0">
+        <slot name="featured" />
+        <slot name="githubHeatMap" />
+        <slot />
+      </main>
+
+      <!-- Right Sidebar — stacks below on mobile, fixed sidebar on lg+ -->
+      <aside class="w-full border-t border-white/10 pt-6 lg:border-t-0 lg:pt-0 lg:w-[350px] lg:shrink-0 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto lg:pl-8 overflow-x-hidden">
+        <slot name="featuredWidget" />
+      </aside>
+
+    </div>
   </body>
 </html>

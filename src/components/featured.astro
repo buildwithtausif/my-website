@@ -1,0 +1,95 @@
+---
+import { getCollection } from "astro:content";
+import createSlug from "@utils/createSlug";
+
+const allBlogPosts = await getCollection("blog");
+const latestPosts = allBlogPosts
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+  rel="stylesheet"
+/>
+<h1 class="text-lg mb-4 text-lime-400">
+    <span class="press-start-2p-regular">Latest Posts</span>
+</h1>
+<div class="flex flex-col gap-4">
+  {
+    latestPosts.map((post) => (
+      <a
+        href={`/blog/${createSlug(post.data.title)}`}
+        class="block no-underline"
+      >
+        <div class="card-board" data-topic={post.data.title}>
+          <div class="topic-name">{post.data.title}</div>
+        </div>
+      </a>
+    ))
+  }
+</div>
+<style>
+  .press-start-2p-regular {
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
+  }
+  .card-board {
+    border: 2px solid oklch(84.1% 0.238 128.85);
+    width: 320px;
+    min-height: 64px;
+    border-radius: 5px;
+    border-right-width: 10px;
+    border-left-width: 10px;
+    color: white;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  @supports (corner-shape: scoop) {
+    .card-board {
+      corner-shape: scoop;
+    }
+  }
+  .card-board::before {
+    content: attr(data-topic);
+    position: absolute;
+    inset: 0;
+    box-sizing: border-box;
+    background-color: oklch(84.1% 0.238 128.85);
+    color: black;
+    padding: 8px;
+    clip-path: inset(-1px -1px -1px 100%); /* fully clipped (invisible) by default */
+  }
+  @keyframes growRight {
+    from {
+      clip-path: inset(-1px -1px -1px 100%);
+    }
+    10% {
+      clip-path: inset(-1px -1px -1px 90%);
+    }
+    25% {
+      clip-path: inset(-1px -1px -1px 65%);
+    }
+    55% {
+      clip-path: inset(-1px -1px -1px 35%);
+    }
+    75% {
+      clip-path: inset(-1px -1px -1px 15%);
+    }
+    to {
+      clip-path: inset(-1px -1px -1px -1px);
+    }
+  }
+  .card-board:hover::before {
+    animation: growRight 170ms ease-in forwards;
+  }
+  .topic-name {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+</style>
