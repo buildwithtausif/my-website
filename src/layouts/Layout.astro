@@ -1,7 +1,10 @@
 ---
 import "../styles/global.css";
+import { Image } from "astro:assets";
 import Navigation from "@components/navigation.astro";
 import Socials from "@components/socials.astro";
+import Footer from "@components/footer.astro";
+import dustin from "@res/images/dustin.jpg";
 // metadata
 interface Props {
   title: string;
@@ -39,21 +42,37 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <Navigation />
     <!-- Twitter-style 2-column grid -->
     <div
-      class="mx-auto flex flex-col lg:flex-row w-full max-w-[1265px] min-h-screen px-4 sm:px-6 lg:px-0 pb-24 lg:pb-0"
+      class="mx-auto flex flex-col lg:flex-row w-full max-w-[1265px] min-h-screen px-4 sm:px-6 lg:px-0 pb-24 lg:pb-0 pt-6 lg:pt-10"
     >
       <!-- Middle Column — main feed -->
-      <main class="flex-1 min-w-0 lg:border-r lg:border-white/10 pb-6 lg:pb-0">
-        <slot />
-        <slot />
-        <slot />
+      <main
+        class="flex-1 min-w-0 lg:border-r lg:border-white/10 pb-6 lg:pb-0 lg:pr-8"
+      >
+        <slot name="no-bs-zone" />
+        <slot name="how-it-started" />
       </main>
 
-      <!-- Right Sidebar — stacks below on mobile, fixed sidebar on lg+ -->
+      <!-- Right Sidebar — stacks below on mobile, native sticky on lg+ -->
       <aside
-        class="w-full border-t border-white/10 pt-6 lg:border-t-0 lg:pt-0 lg:w-[350px] lg:shrink-0 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto lg:pl-8 overflow-x-hidden"
+        class="w-full border-t border-white/10 pt-6 lg:border-t-0 lg:pt-0 lg:w-[350px] lg:shrink-0 self-start lg:sticky lg:top-24 lg:pl-8 overflow-x-hidden mb-2"
       >
         <slot name="featuredWidget" />
+        <!-- dustin's widget -->
+        <div class="hidden lg:flex relative rounded-sm overflow-hidden isolate group mb-6 border border-zinc-800 shadow-xl m-2">
+          <Image src={dustin} alt="Dustin Henderson Stranger Things" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 -z-10" />
+          <div class="absolute inset-0 bg-linear-to-t from-black via-black/70 to-transparent -z-10" />
+          <div class="relative p-5 pt-40 w-full flex flex-col justify-end">
+             <p class="font-mono text-[13px] leading-relaxed text-zinc-300 drop-shadow-md">
+                Alright, so here’s the deal—you can navigate the entire site using these controls. It’s pretty straightforward… I made sure of that.<br/><br/>
+                <span class="bg-lime-400 text-stone-900 px-2 py-0.5 font-bold rounded-[2px] mx-0.5">H</span>
+                <span class="bg-lime-400 text-stone-900 px-2 py-0.5 font-bold rounded-[2px] mx-0.5">B</span>
+                <span class="bg-lime-400 text-stone-900 px-2 py-0.5 font-bold rounded-[2px] mx-0.5">P</span>
+                <span class="bg-lime-400 text-stone-900 px-2 py-0.5 font-bold rounded-[2px] mx-0.5">R</span>
+             </p>
+          </div>
+        </div>
         <Socials />
+        <Footer />
       </aside>
     </div>
   </body>

@@ -4,10 +4,10 @@ import '../styles/global.css'
 <div class="nav z-50 sticky top-2.5 grid grid-cols-none md:grid-flow-col md:grid-cols-1">
     <ul class="flex flex-wrap gap-1.5 m-2.5 rounded-xs">
         <li class="font-black">bsh</li>
-        <li><a href={Astro.site}>[H] home</a></li>
-        <li><a href={Astro.site + "./blog"}>[B] Blog</a></li>
-        <li><a href="#">[P] Projects</a></li>
-        <li><a href="#">[R] Resume</a></li>
+        <li><a href={Astro.site} data-nav-key="h">[H] home</a></li>
+        <li><a href={Astro.site + "./blog"} data-nav-key="b">[B] Blog</a></li>
+        <li><a href="#" data-nav-key="p">[P] Projects</a></li>
+        <li><a href="#" data-nav-key="r">[R] Resume</a></li>
     </ul>
 </div>
 <style>
@@ -50,3 +50,20 @@ import '../styles/global.css'
         }
     }
 </style>
+<script>
+    document.addEventListener("keydown", (e) => {
+        // Ignore key presses if the user is typing in an input field or content editable
+        if (["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement).tagName) || (e.target as HTMLElement).isContentEditable) return;
+
+        const key = e.key.toLowerCase();
+        const allowedKeys = ["h", "b", "p", "r"];
+
+        if (allowedKeys.includes(key)) {
+            // Find the anchor tag with the matching data-nav-key attribute
+            const link = document.querySelector(`a[data-nav-key="${key}"]`) as HTMLAnchorElement;
+            if (link) {
+                link.click();
+            }
+        }
+    });
+</script>

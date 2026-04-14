@@ -2,7 +2,130 @@
 import "../styles/global.css";
 import Layout from "@layouts/Layout.astro";
 import Featured from "@components/featured.astro";
+import swissKnife from "@res/images/icons/swiss_knife.svg"
+import { Image } from "astro:assets";
+import Terminal from "@components/terminal.astro";
 ---
+
 <Layout title="Tausif Alam | Full Stack Developer">
-  <Featured slot="featuredWidget"/>
+  <Featured slot="featuredWidget" />
+
+  <div slot="no-bs-zone" class="w-full flex flex-col gap-6 py-4">
+    <h1 class="press-start-2p-regular text-lime-400 text-2xl lg:text-3xl mt-4">
+      About me
+    </h1>
+    <div class="prose prose-invert max-w-none text-zinc-300 leading-loose">
+      <p>
+        Hi! I'm <span class="bg-lime-400 text-stone-900 px-2 font-bold"
+          >Tausif Alam</span
+        > , a software engineer based in <span
+          class="bg-lime-400 text-stone-900 px-2 font-bold">Delhi, India</span
+        >
+        specializing in backend development, my main tech stack includes <span
+          class="bg-lime-400 text-stone-900 px-2 font-bold">Node.js</span
+        > and <span class="bg-lime-400 text-stone-900 px-2 font-bold"
+          >PostgreSQL</span
+        >. I can develop APIs, manage databases, and build scalable systems. I'm
+        passionate about building software that solves real-world problems and
+        I'm always open to new challenges.
+        <br>
+        <span class="bg-lime-400 text-stone-900 px-2 font-bold">Interests:</span> Physics and Mathematics, its a never ending story of my love and hate realtionship but what matters is I truly love it.
+        If nostlagia hits you hard or want to know the secret ingredient, you can read <a class="story-section text-lime-400" href="#how-it-started">my story</a>
+      </p>
+      <!-- Skills (in my forge) -->
+      <div class="skill-heading flex flex-row items-center gap-4 my-8">
+        <Image src={swissKnife} alt="Anvil" format="webp" width="48" height="48" class="m-0! shrink-0" />
+        <h2 class="m-0! text-2xl font-extrabold text-white leading-none tracking-wider capitalize">Skills (in my forge)</h2>
+      </div>
+      <Terminal 
+        user="tausif" 
+        host="forge" 
+        path="~/skills" 
+        command="fetch skills" 
+        data={[
+          { label: 'Frontend', value: 'React.js, Astro' },
+          { label: 'Backend', value: 'Node.js (JavaScript, TypeScript)' },
+          { label: 'Databases', value: 'PostgreSQL, MySQL' },
+          { label: 'Languages', value: 'JavaScript, TypeScript, C' },
+          { label: 'Tools', value: 'Git, Postman, Bruno' },
+          { label: 'AI', value: 'Prompt Engineering, AI-assisted development (antigravity)' }
+        ]} 
+      />
+
+
+
+      <!-- Education timeline -->
+      <p class="mt-8">
+        <span class="bg-lime-400 text-stone-900 px-2 font-bold"
+          >Education Timeline</span
+        >
+      </p>
+
+      <ul
+        class="relative border-l border-zinc-700 ml-3 md:ml-4 mt-6 mb-4 list-none p-0"
+      >
+        <!-- Current Degree -->
+        <li class="mb-10 ml-8 relative p-0 m-0">
+          <span
+            class="absolute flex items-center justify-center w-4 h-4 rounded-full -left-[40px] top-1 bg-black ring-4 ring-black z-10"
+          >
+            <span
+              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-60"
+            ></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-lime-400"
+            ></span>
+          </span>
+
+          <div class="flex flex-col gap-1 -mt-1.5">
+            <time
+              class="mb-1 text-xs font-mono font-normal leading-none text-lime-400/80"
+              >2025 &mdash; 2028 (Present)</time
+            >
+            <h3 class="text-lg font-bold text-white m-0">
+              Bachelor's of Computer Application
+            </h3>
+            <p class="mb-2 text-base font-normal text-zinc-400 m-0">
+              Guru Gobind Singh Indraprastha University<br />Delhi, India
+            </p>
+            <div class="mt-1">
+              <span
+                class="inline-flex items-center rounded-sm bg-lime-400/10 px-2 py-1 text-xs font-mono font-medium text-lime-400 ring-1 ring-inset ring-lime-400/20"
+              >
+                Current SGPA: 9.45
+              </span>
+            </div>
+          </div>
+        </li>
+
+        <!-- Origin / Past indicator -->
+        <li class="ml-8 relative p-0 m-0 pb-6">
+          <span
+            class="absolute flex items-center justify-center w-3 h-3 rounded-full -left-[38px] top-1.5 bg-black ring-4 ring-black z-10"
+          >
+            <span
+              class="relative inline-flex rounded-full h-1.5 w-1.5 bg-zinc-600"
+            ></span>
+          </span>
+
+          <div class="flex flex-col gap-1 -mt-1">
+            <p class="text-sm font-mono italic text-zinc-600 m-0">
+              High School - PCM (2023-2024)
+            </p>
+            <div class="mt-1">
+              <span
+                class="inline-flex items-center rounded-sm bg-zinc-800/50 px-2 py-1 text-xs font-mono text-zinc-500 ring-1 ring-inset ring-zinc-700"
+              >
+                CGPA: 8.45
+              </span>
+            </div>
+          </div>
+        </li>
+        <!-- Line fade out -->
+        <div
+          class="absolute bottom-0 -left-px w-[3px] h-20 bg-linear-to-t from-[#000000] via-[#000000]/80 to-transparent z-0"
+        >
+        </div>
+      </ul>
+    </div>
+  </div>
 </Layout>
