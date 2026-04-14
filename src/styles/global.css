@@ -1,23 +1,27 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-
 body {
   overflow-x: hidden;
   scroll-behavior: smooth;
 }
+.press-start-2p-regular {
+  font-family: "Press Start 2P", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
 ::selection {
   background: var(--color-lime-400);
-  color: var(--color-stone-900)
+  color: var(--color-stone-900);
 }
 .scanline-bg {
-    position: relative;
-    background-color: #000000; /* Dark base color */
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
+  position: relative;
+  background-color: #000000; /* Dark base color */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
 
-  .scanline-bg::before {
+.scanline-bg::before {
   content: "";
   position: fixed;
   top: 0;
@@ -31,9 +35,10 @@ body {
   background-image: linear-gradient(
     to bottom,
     transparent 0px,
-    transparent 2px,               /* 2px transparent gap */
-    rgba(217, 217, 217, 0.08) 2px, /* Start of the visible line */
-    rgba(217, 217, 217, 0.08) 4px  /* End of the line (2px thick) */
+    transparent 2px,
+    /* 2px transparent gap */ rgba(217, 217, 217, 0.08) 2px,
+    /* Start of the visible line */ rgba(217, 217, 217, 0.08) 4px
+      /* End of the line (2px thick) */
   );
 
   /* Set the size to match the new 4px total row height */
@@ -49,6 +54,6 @@ body {
   }
   to {
     /* Changed from 100% to 4px for a smoother infinite loop */
-    background-position: 0 4px; 
+    background-position: 0 4px;
   }
 }

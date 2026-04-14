@@ -7,6 +7,7 @@ import '../styles/global.css'
         <li><a href={Astro.site}>[H] home</a></li>
         <li><a href={Astro.site + "./blog"}>[B] Blog</a></li>
         <li><a href="#">[P] Projects</a></li>
+        <li><a href="#">[R] Resume</a></li>
     </ul>
 </div>
 <style>
@@ -22,13 +23,30 @@ import '../styles/global.css'
         font-size: var(--text-sm);
         cursor: pointer;
     }
-    .nav ul li:nth-child(1):not(.nav ul:nth-child(2) li) {
+    .nav ul li:nth-child(1):not(.nav ul li:nth-child(3)) {
         background-color: var(--color-lime-400);
         color: var(--color-slate-900);
         text-transform: lowercase;
     }
-    .nav ul li:not(:nth-child(1)):hover, .nav ul:nth-child(2) li:hover  {
+    .nav ul li:not(:nth-child(1)):hover, .nav ul li:nth-child(3):hover  {
         background-color: --alpha(var(--color-lime-400) / 65%);
         color:  var(--color-white);
+    }
+    .nav ul li:last-child {
+        background-color: var(--color-lime-400);
+        color: var(--color-slate-900);
+        /* add glowing animation to it */
+        animation: glow 2s ease-in-out infinite;
+    }
+    @keyframes glow {
+        0% {
+            box-shadow: 0 0 5px var(--color-lime-400);
+        }
+        50% {
+            box-shadow: 0 0 10px var(--color-lime-400);
+        }
+        100% {
+            box-shadow: 0 0 5px var(--color-lime-400);
+        }
     }
 </style>

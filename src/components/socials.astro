@@ -1,0 +1,41 @@
+---
+import { Image } from "astro:assets";
+import github from "../res/images/icons/github.svg";
+import linkedin from "../res/images/icons/linkedin.svg";
+import instagram from "../res/images/icons/insta.svg";
+import mail from "../res/images/icons/mail.svg";
+import twitter from "../res/images/icons/x.svg";
+---
+
+<h1 class="text-lg mt-5 text-lime-400 text-center press-start-2p-regular">
+  Connect:-
+</h1>
+<ul class="flex gap-5 mt-5 justify-center items-center">
+  <li>
+    <a href="https://github.com/buildwithtausif" target="_blank">
+      <Image src={github} alt="Github" width="24" height="24" />
+    </a>
+  </li>
+  <li>
+    <a href="https://www.linkedin.com/in/buildwithtausif/" target="_blank">
+      <Image src={linkedin} alt="Linkedin" width="24" height="24" />
+    </a>
+  </li>
+  <li>
+    <a href="https://x.com/buildwithtausif" target="_blank">
+      <Image src={twitter} alt="Twitter" width="24" height="24" />
+    </a>
+  </li>
+  <li>
+    <a href="https://www.instagram.com/bsh_tausif/" target="_blank">
+      <Image src={instagram} alt="Instagram" width="24" height="24" />
+    </a>
+  </li>
+  <li>
+    <a
+      href="mailto:connect.tausifalam@outlook.com?subject=[FromWebsite]:[Please add your subject here]"
+    >
+      <Image src={mail} alt="Email" width="24" height="24" />
+    </a>
+  </li>
+</ul>

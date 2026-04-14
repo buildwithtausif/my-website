@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Navigation from "@components/navigation.astro";
+import Socials from "@components/socials.astro";
 // metadata
 interface Props {
   title: string;
@@ -26,30 +27,34 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={desc} />
     <meta name="keywords" content={keywords} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
     <title>{title}</title>
   </head>
   <body class="min-h-screen scanline-bg">
     <Navigation />
-    <!-- Twitter-style 3-column grid -->
-    <div class="mx-auto flex flex-col lg:flex-row w-full max-w-[1265px] min-h-screen px-4 sm:px-6 lg:px-0">
-
-      <!-- Left Sidebar — nav/icons (hidden below xl) -->
-      <aside class="hidden xl:flex xl:flex-col xl:w-[275px] xl:shrink-0 sticky top-0 h-screen overflow-y-auto">
-        <slot name="leftSidebar" />
-      </aside>
-
+    <!-- Twitter-style 2-column grid -->
+    <div
+      class="mx-auto flex flex-col lg:flex-row w-full max-w-[1265px] min-h-screen px-4 sm:px-6 lg:px-0 pb-24 lg:pb-0"
+    >
       <!-- Middle Column — main feed -->
-      <main class="flex-1 min-w-0 lg:border-x lg:border-white/10 pb-6 lg:pb-0">
-        <slot name="featured" />
-        <slot name="githubHeatMap" />
+      <main class="flex-1 min-w-0 lg:border-r lg:border-white/10 pb-6 lg:pb-0">
+        <slot />
+        <slot />
         <slot />
       </main>
 
       <!-- Right Sidebar — stacks below on mobile, fixed sidebar on lg+ -->
-      <aside class="w-full border-t border-white/10 pt-6 lg:border-t-0 lg:pt-0 lg:w-[350px] lg:shrink-0 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto lg:pl-8 overflow-x-hidden">
+      <aside
+        class="w-full border-t border-white/10 pt-6 lg:border-t-0 lg:pt-0 lg:w-[350px] lg:shrink-0 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto lg:pl-8 overflow-x-hidden"
+      >
         <slot name="featuredWidget" />
+        <Socials />
       </aside>
-
     </div>
   </body>
 </html>
