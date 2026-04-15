@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import "../styles/fontfamily.css";
 import { Image } from "astro:assets";
 import Navigation from "@components/navigation.astro";
 import Socials from "@components/socials.astro";
@@ -30,12 +31,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={desc} />
     <meta name="keywords" content={keywords} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-      rel="stylesheet"
-    />
+
     <title>{title}</title>
   </head>
   <body class="min-h-screen scanline-bg">

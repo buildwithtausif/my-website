@@ -5,7 +5,7 @@ import createSlug from "@utils/createSlug";
 const allBlogPosts = await getCollection("blog");
 const latestPosts = allBlogPosts
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+  .slice(0, 2);
 ---
 <h1 class="text-lg mb-4 text-lime-400 text-center">
     <span class="press-start-2p-regular">Latest Posts</span>
