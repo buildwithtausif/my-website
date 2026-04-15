@@ -1,15 +1,20 @@
 ---
 import "../styles/global.css";
+import { Image } from "astro:assets";
 import Layout from "@layouts/Layout.astro";
 import Featured from "@components/featured.astro";
-import swissKnife from "@res/images/icons/swiss_knife.svg"
-import { Image } from "astro:assets";
 import Terminal from "@components/terminal.astro";
+// images
+import swissKnife from "@res/images/icons/swiss_knife.svg";
+import nokiac5 from "@res/images/c5.png";
+import nokiae6 from "@res/images/e6.png";
+import nokia5130 from "@res/images/xpressmusic.png";
 ---
 
 <Layout title="Tausif Alam | Full Stack Developer">
   <Featured slot="featuredWidget" />
 
+  <!-- for the bs people -->
   <div slot="no-bs-zone" class="w-full flex flex-col gap-6 py-4">
     <h1 class="press-start-2p-regular text-lime-400 text-2xl lg:text-3xl mt-4">
       About me
@@ -28,31 +33,48 @@ import Terminal from "@components/terminal.astro";
         >. I can develop APIs, manage databases, and build scalable systems. I'm
         passionate about building software that solves real-world problems and
         I'm always open to new challenges.
-        <br>
-        <span class="bg-lime-400 text-stone-900 px-2 font-bold">Interests:</span> Physics and Mathematics, its a never ending story of my love and hate realtionship but what matters is I truly love it.
-        If nostlagia hits you hard or want to know the secret ingredient, you can read <a class="story-section text-lime-400" href="#how-it-started">my story</a>
+        <br />
+        <span class="bg-lime-400 text-stone-900 px-2 font-bold">Interests:</span
+        > Physics and Mathematics, its a never ending story of my love and hate realtionship
+        but what matters is I truly love it. If nostlagia hits you hard or want to
+        know the secret ingredient, you can read <a
+          class="story-section text-lime-400"
+          href="#how-it-started">my story</a
+        >
       </p>
       <!-- Skills (in my forge) -->
       <div class="skill-heading flex flex-row items-center gap-4 my-8">
-        <Image src={swissKnife} alt="Anvil" format="webp" width="48" height="48" class="m-0! shrink-0" />
-        <h2 class="m-0! text-2xl font-extrabold text-white leading-none tracking-wider capitalize">Skills (in my forge)</h2>
+        <Image
+          src={swissKnife}
+          alt="Anvil"
+          format="webp"
+          width="48"
+          height="48"
+          class="m-0! shrink-0"
+        />
+        <h2
+          class="m-0! text-2xl font-extrabold text-white leading-none tracking-wider capitalize"
+        >
+          Skills (in my forge)
+        </h2>
       </div>
-      <Terminal 
-        user="tausif" 
-        host="forge" 
-        path="~/skills" 
-        command="fetch skills" 
+      <Terminal
+        user="tausif"
+        host="forge"
+        path="~/skills"
+        command="fetch skills"
         data={[
-          { label: 'Frontend', value: 'React.js, Astro' },
-          { label: 'Backend', value: 'Node.js (JavaScript, TypeScript)' },
-          { label: 'Databases', value: 'PostgreSQL, MySQL' },
-          { label: 'Languages', value: 'JavaScript, TypeScript, C' },
-          { label: 'Tools', value: 'Git, Postman, Bruno' },
-          { label: 'AI', value: 'Prompt Engineering, AI-assisted development (antigravity)' }
-        ]} 
+          { label: "Frontend", value: "React.js, Astro" },
+          { label: "Backend", value: "Node.js (JavaScript, TypeScript)" },
+          { label: "Databases", value: "PostgreSQL, MySQL" },
+          { label: "Languages", value: "JavaScript, TypeScript, C" },
+          { label: "Tools", value: "Git, Postman, Bruno" },
+          {
+            label: "AI",
+            value: "Prompt Engineering, AI-assisted development (antigravity)",
+          },
+        ]}
       />
-
-
 
       <!-- Education timeline -->
       <p class="mt-8">
@@ -127,5 +149,18 @@ import Terminal from "@components/terminal.astro";
         </div>
       </ul>
     </div>
+  </div>
+
+  <!-- for Hephaestus wordhippers (the me zone) -->
+  <div slot="how-it-started" class="w-full flex flex-col gap-6 py-4">
+    <h1
+      id="how-it-started"
+      class="press-start-2p-regular text-lime-400 text-2xl lg:text-3xl mt-4"
+    >
+      The Story 
+    </h1>
+    <p class="prose prose-invert max-w-none text-zinc-300 leading-loose">
+      
+    </p>
   </div>
 </Layout>

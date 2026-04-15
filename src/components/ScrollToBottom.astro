@@ -1,0 +1,71 @@
+---
+// A floating action button that scrolls to the bottom of the page.
+// Visible only on smaller screens (below lg breakpoint).
+// Leverages the SmoothScrollIsland utility via an anchor link to #footer.
+---
+
+<a
+  id="scrollToBottomBtn"
+  href="#footer"
+  aria-label="Scroll to bottom"
+  class="fixed bottom-6 right-6 z-50 lg:hidden p-3 rounded-[2px] bg-lime-400 text-stone-900 shadow-[4px_4px_0px_rgba(0,0,0,1)] border-2 border-zinc-900 transition-all duration-300 opacity-0 pointer-events-none translate-y-4 hover:bg-lime-300 active:translate-y-[2px] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] group flex items-center justify-center cursor-pointer"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    class="group-hover:-translate-y-1 transition-transform duration-200"
+  >
+    <!-- Pixelated/Retro Down Arrow -->
+    <path d="M11 4h2v10h4v2h-2v2h-2v2h-2v-2H9v-2H7v-2h4V4z" />
+  </svg>
+</a>
+
+<script>
+  function setupScrollVisibility() {
+    const btn = document.getElementById("scrollToBottomBtn");
+    if (!btn) return;
+
+    const controller = new AbortController();
+
+    const checkVisibility = () => {
+      const scrollY = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      
+      // Show button if we've scrolled down at least 150px 
+      // AND we are not at the very bottom (within 50px of the footer).
+      const hasScrolledDown = scrollY > 150;
+      const isNotAtBottom = maxScroll - scrollY > 50;
+
+      if (hasScrolledDown && isNotAtBottom) {
+        btn.classList.add("opacity-100", "pointer-events-auto", "translate-y-0");
+        btn.classList.remove("opacity-0", "pointer-events-none", "translate-y-4");
+      } else {
+        btn.classList.add("opacity-0", "pointer-events-none", "translate-y-4");
+        btn.classList.remove("opacity-100", "pointer-events-auto", "translate-y-0");
+      }
+    };
+
+    window.addEventListener("scroll", checkVisibility, { passive: true, signal: controller.signal });
+    checkVisibility(); // initial check
+
+    (window as any)._scrollVisibilityCtrl = controller;
+  }
+
+  // Handle standard page loads
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupScrollVisibility);
+  } else {
+    setupScrollVisibility();
+  }
+  
+  // Clean up and re-initialize for Astro View Transitions (if used)
+  document.addEventListener("astro:page-load", () => {
+    if ((window as any)._scrollVisibilityCtrl) {
+      (window as any)._scrollVisibilityCtrl.abort();
+    }
+    setupScrollVisibility();
+  });
+</script>
