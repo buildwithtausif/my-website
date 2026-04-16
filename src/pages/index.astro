@@ -4,11 +4,9 @@ import { Image } from "astro:assets";
 import Layout from "@layouts/Layout.astro";
 import Featured from "@components/featured.astro";
 import Terminal from "@components/terminal.astro";
+import ProjectShowcase from "@components/ProjectShowcase.astro";
 // images
 import swissKnife from "@res/images/icons/swiss_knife.svg";
-import nokiac5 from "@res/images/c5.png";
-import nokiae6 from "@res/images/e6.png";
-import nokia5130 from "@res/images/xpressmusic.png";
 ---
 
 <Layout title="Tausif Alam | Full Stack Developer">
@@ -20,27 +18,36 @@ import nokia5130 from "@res/images/xpressmusic.png";
       About me
     </h1>
     <div class="prose prose-invert max-w-none text-zinc-300 leading-loose">
-      <p>
+      <!-- <p>
         Hi! I'm <span class="bg-lime-400 text-stone-900 px-2 font-bold"
           >Tausif Alam</span
-        > , a software engineer based in <span
+        > , a Software Engineer based in <span
           class="bg-lime-400 text-stone-900 px-2 font-bold">Delhi, India</span
-        >
-        specializing in backend development, my main tech stack includes <span
+        > specializing in backend development, my main tech stack includes <span
           class="bg-lime-400 text-stone-900 px-2 font-bold">Node.js</span
         > and <span class="bg-lime-400 text-stone-900 px-2 font-bold"
           >PostgreSQL</span
-        >. I can develop APIs, manage databases, and build scalable systems. I'm
-        passionate about building software that solves real-world problems and
-        I'm always open to new challenges.
-        <br />
+        >. Currently, I'm a computer science undergraduate student. I love to
+        build systems that serves a real purpose to the users, the one that
+        makes the life better and easier. most important takeaway is "I can
+        definitely build stuff" feel free to contant me and let us discuss your
+        dream your idea that definitely serves a purpose and let us build it
+        together! you can contant me on my email <a
+          href="mailto:connect.tausifalam@outlook.com?subject=[From%20Website]:[add your subject here]"
+          class="text-lime-400">connect.tausifalam@outlook.com</a
+        >, apart from building software there is a home, me and my books - and
+        the love for science :) <br />
         <span class="bg-lime-400 text-stone-900 px-2 font-bold">Interests:</span
         > Physics and Mathematics, its a never ending story of my love and hate realtionship
-        but what matters is I truly love it. If nostlagia hits you hard or want to
-        know the secret ingredient, you can read <a
-          class="story-section text-lime-400"
-          href="#how-it-started">my story</a
-        >
+        but what matters is I truly love it.
+      </p> -->
+      <p>
+        I'm Tausif Alam - <span class="underline text-lime-400">Software Engineer</span> based in Delhi, India. I build stuff and definitely can build one for you. You got an idea I got the skills
+        feel free to reach out to me on my email <a
+          href="mailto:connect.tausifalam@outlook.com?subject=[From%20Website]:[add your subject here]"
+          class="text-lime-400">connect.tausifalam@outlook.com</a
+        > or you can DM me on my instagram <a href="https://www.instagram.com/bsh_tausif/" target="_blank" class="text-lime-400">@bsh_tausif</a>.
+        Explore my articles or scroll to know more.
       </p>
       <!-- Skills (in my forge) -->
       <div class="skill-heading flex flex-row items-center gap-4 my-8">
@@ -55,7 +62,7 @@ import nokia5130 from "@res/images/xpressmusic.png";
         <h2
           class="m-0! text-2xl font-extrabold text-white leading-none tracking-wider capitalize"
         >
-          Skills (in my forge)
+          The Skill Forge
         </h2>
       </div>
       <Terminal
@@ -75,6 +82,8 @@ import nokia5130 from "@res/images/xpressmusic.png";
           },
         ]}
       />
+
+      <ProjectShowcase />
 
       <!-- Education timeline -->
       <p class="mt-8">
@@ -149,18 +158,5 @@ import nokia5130 from "@res/images/xpressmusic.png";
         </div>
       </ul>
     </div>
-  </div>
-
-  <!-- for Hephaestus wordhippers (the me zone) -->
-  <div slot="how-it-started" class="w-full flex flex-col gap-6 py-4">
-    <h1
-      id="how-it-started"
-      class="press-start-2p-regular text-lime-400 text-2xl lg:text-3xl mt-4"
-    >
-      The Story 
-    </h1>
-    <p class="prose prose-invert max-w-none text-zinc-300 leading-loose">
-      
-    </p>
   </div>
 </Layout>

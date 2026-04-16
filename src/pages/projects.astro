@@ -1,0 +1,144 @@
+---
+import { getCollection } from "astro:content";
+import BlogLayout from "@layouts/blogLayout.astro";
+import createSlug from "@utils/createSlug";
+
+// sort according to the latest publishing date
+const projects = (await getCollection("project")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const projectCount = projects.length;
+// Extract all tags and count them
+const tagsCount = projects.reduce((acc, project) => {
+  if (project.data.tags) {
+    project.data.tags.forEach(tag => {
+      acc[tag] = (acc[tag] || 0) + 1;
+    });
+  }
+  return acc;
+}, {} as Record<string, number>);
+
+const sortedTags = Object.entries(tagsCount).sort((a, b) => a[0].localeCompare(b[0]));
+---
+
+<BlogLayout title="Projects | buildwithtausif" desc="Showcase of all my built projects from tiny to huge, frontend to backend.">
+  <div class="max-w-310 mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-24 font-sans text-neutral-300">
+    
+    <!-- Header row -->
+    <div class="mb-5 flex items-start">
+      <h1 class="text-6xl md:text-[5.5rem] font-normal tracking-tight text-neutral-100 capitalize">
+        Projects
+      </h1>
+      <sup class="text-sm md:text-lg font-normal mt-3 ml-2 text-neutral-400">(<span id="project-count">{projectCount}</span>)</sup>
+    </div>
+
+    <!-- Top Border Line -->
+    <div class="border-t border-[#333]"></div>
+
+    <!-- Main Content Grid -->
+    <div class="flex flex-col md:grid md:grid-cols-[250px_1fr] lg:grid-cols-[280px_1fr] md:gap-8 mt-6">
+      
+      <!-- Left Sidebar: Filters -->
+      <div class="md:col-span-1 shrink-0">
+        <!-- Desktop/Mobile Container -->
+        <div class="flex flex-row md:flex-col items-center md:items-start border-b md:border-b-0 border-[#333] pt-2 md:pt-0 pb-6 md:pb-0">
+          
+          <!-- Folder Header -->
+          <div class="flex items-center text-neutral-200 text-[15px] md:text-sm md:mb-5 font-normal tracking-wide shrink-0 border-r border-[#333] md:border-r-0 pr-5 md:pr-0 mr-5 md:mr-0 h-full">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H20a2 2 0 0 1 2 2v5"/><circle cx="13" cy="12" r="2"/><path d="M18 19c-2.8 0-5-2.2-5-5v8"/><circle cx="20" cy="19" r="2"/></svg> <span class="ml-2 font-bold text-lime-400">Tech Stacks</span>
+          </div>
+
+          <!-- Filter list -->
+          <div class="flex flex-row md:flex-col overflow-x-auto md:overflow-visible gap-6 md:gap-2.5 scrollbar-hide w-full text-[14px] md:text-[13px] text-neutral-400 md:text-neutral-500 font-normal md:font-light">
+            {sortedTags.map(([tag, count]) => (
+              <label class="flex items-center cursor-pointer group shrink-0 w-auto">
+                <input type="checkbox" value={tag.toLowerCase()} class="hidden peer tag-filter" />
+                <div class="hidden md:flex items-center justify-center w-3.5 h-3.5 border border-[#444] rounded-[3px] mr-2 shrink-0 group-hover:border-[#666] transition-colors peer-checked:border-neutral-400 text-transparent peer-checked:text-neutral-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                </div>
+                <span class="group-hover:text-neutral-200 font-normal transition-colors peer-checked:bg-lime-400 peer-checked:text-stone-900 peer-checked:font-medium uppercase tracking-wider text-xs">{tag} ({count})</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Area: Projects List -->
+      <div class="md:col-span-1 pt-6 md:pt-0 pb-12" id="projects-list">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
+          {projects.map((project) => (
+            <div 
+              class="project-card group flex flex-col justify-between bg-[#111] border border-[#333] hover:border-lime-400/30 rounded-lg p-5 transition-all duration-300 relative overflow-hidden"
+              data-tags={project.data.tags ? project.data.tags.map(t => t.toLowerCase()).join(',') : ''}
+              data-year={project.data.pubDate.getFullYear()}
+            >
+              <!-- Hover gradient effect -->
+              <div class="absolute -right-10 -top-10 w-32 h-32 bg-lime-400/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+              <div class="relative z-10">
+                <div class="flex items-start justify-between mb-3">
+                  <h3 class="text-xl font-bold text-neutral-100 m-0 group-hover:text-lime-400 transition-colors">
+                    <a href={`/project/${createSlug(project.data.title)}/`} class="focus:outline-none">
+                      <span class="absolute inset-0" aria-hidden="true"></span>
+                      {project.data.title}
+                    </a>
+                  </h3>
+                  <div class="flex flex-col items-end gap-1">
+                     <span class="inline-flex items-center rounded-sm bg-zinc-800/80 px-2.5 py-0.5 text-[10px] font-mono font-medium text-zinc-400 ring-1 ring-inset ring-zinc-700/50 uppercase">
+                       {project.data.pubDate.getFullYear()}
+                     </span>
+                  </div>
+                </div>
+                
+                <p class="text-sm text-neutral-400 line-clamp-3 mb-5 font-sans leading-relaxed">
+                  {project.data.description}
+                </p>
+              </div>
+
+              <div class="relative z-10 flex flex-wrap items-center gap-2 mt-auto">
+                {project.data.tags.map((tag: string) => (
+                  <span class="inline-flex items-center bg-zinc-800/50 px-2 py-0.5 text-[10px] font-medium text-zinc-300 uppercase tracking-widest border border-zinc-700">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</BlogLayout>
+
+<script>
+  const filters = document.querySelectorAll('.tag-filter');
+  const projects = document.querySelectorAll('.project-card');
+  const countSpan = document.getElementById('project-count');
+
+  filters.forEach(filter => {
+    filter.addEventListener('change', () => {
+      const selectedTags = Array.from(filters)
+        .filter(f => (f as HTMLInputElement).checked)
+        .map(f => (f as HTMLInputElement).value);
+
+      let visibleCount = 0;
+
+      projects.forEach(project => {
+        const projectTags = (project.getAttribute('data-tags') || '').split(',');
+        const isVisible = selectedTags.length === 0 || selectedTags.some(tag => projectTags.includes(tag));
+        
+        if (isVisible) {
+          (project as HTMLElement).style.display = '';
+          visibleCount++;
+        } else {
+          (project as HTMLElement).style.display = 'none';
+        }
+      });
+
+      if (countSpan) {
+        countSpan.textContent = visibleCount.toString();
+      }
+    });
+  });
+</script>
