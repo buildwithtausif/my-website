@@ -1,6 +1,9 @@
 ---
-import "../styles/global.css"
-import Navigation from "@components/navigation.astro"
+import "../styles/global.css";
+import Navigation from "@components/navigation.astro";
+// images
+import ogImageBlog from "@res/images/ogbannerblog.webp";
+import ogImageProjects from "@res/images/ogbannerprojects.webp";
 // metadata for seo
 interface Props {
     title?: string,
@@ -8,9 +11,9 @@ interface Props {
     keywords?: string
 }
 const { 
-        title = "Blog | more than just a blog by buildwithtausif", 
-        desc = "This is my thought dump and I share everything I come across days, so expect no limitation of content coverage, mostly I'll right about tech, books, philosophy" , 
-        keywords = "buildwithtausif, developer blog, dev blog, tausif's blog"
+        title = "Tausif's Blog | delving into code, life and everything in between", 
+        desc = "A blog to share learnings, going deeper into decision making and decoding the system thinker and sometimes insights from life and books." , 
+        keywords = "buildwithtausif, developer blog, dev blog, tausif's blog, tausif alam blog, bsh_tausif"
 } = Astro.props as Props;
 // canonnical url for seo
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
@@ -19,6 +22,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <title>{title}</title>
+    <!-- basic metadata -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <link rel="canonical" href={canonical} />
@@ -27,7 +32,28 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={desc} />
     <meta name="keywords" content={keywords} />
-    <title>{title}</title>
+    <!-- open graph metadata -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content={title}/>
+    <meta property="og:description" content={desc}/>
+    <meta property="og:url" content={canonical}/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:locale" content="en_US"/>
+    <!-- conditional og:image for project and blog pages -->
+    {Astro.url.pathname.includes("/projects") ? (
+      <meta property="og:image" content={ogImageProjects.src}/>
+    ) : (
+      <meta property="og:image" content={ogImageBlog.src}/>
+    )}
+    <!-- twitter card -->
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content={title}/>
+    <meta name="twitter:description" content={desc}/>
+    <meta name="twitter:image" content={Astro.url.pathname.includes("/projects") ? ogImageProjects.src : ogImageBlog.src}/>
+    <meta name="twitter:image:width" content={Astro.url.pathname.includes("/projects") ? ogImageProjects.width.toString() : ogImageBlog.width.toString()}/>
+    <meta name="twitter:image:height" content={Astro.url.pathname.includes("/projects") ? ogImageProjects.height.toString() : ogImageBlog.height.toString()}/>
+    <meta name="twitter:image:type" content={Astro.url.pathname.includes("/projects") ? ogImageProjects.format : ogImageBlog.format}/>
+    <meta name="twitter:image:alt" content={title}/>
   </head>
   <body class="scanline-bg">
     <Navigation/>

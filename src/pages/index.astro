@@ -10,37 +10,12 @@ import swissKnife from "@res/images/icons/swiss_knife.svg";
 ---
 
 <Layout title="Tausif Alam | Full Stack Developer">
-  <Featured slot="featuredWidget" />
-
   <!-- for the bs people -->
   <div slot="no-bs-zone" class="w-full flex flex-col gap-6 py-4">
     <h1 class="press-start-2p-regular text-lime-400 text-2xl lg:text-3xl mt-4">
       About me
     </h1>
     <div class="prose prose-invert max-w-none text-zinc-300 leading-loose">
-      <!-- <p>
-        Hi! I'm <span class="bg-lime-400 text-stone-900 px-2 font-bold"
-          >Tausif Alam</span
-        > , a Software Engineer based in <span
-          class="bg-lime-400 text-stone-900 px-2 font-bold">Delhi, India</span
-        > specializing in backend development, my main tech stack includes <span
-          class="bg-lime-400 text-stone-900 px-2 font-bold">Node.js</span
-        > and <span class="bg-lime-400 text-stone-900 px-2 font-bold"
-          >PostgreSQL</span
-        >. Currently, I'm a computer science undergraduate student. I love to
-        build systems that serves a real purpose to the users, the one that
-        makes the life better and easier. most important takeaway is "I can
-        definitely build stuff" feel free to contant me and let us discuss your
-        dream your idea that definitely serves a purpose and let us build it
-        together! you can contant me on my email <a
-          href="mailto:connect.tausifalam@outlook.com?subject=[From%20Website]:[add your subject here]"
-          class="text-lime-400">connect.tausifalam@outlook.com</a
-        >, apart from building software there is a home, me and my books - and
-        the love for science :) <br />
-        <span class="bg-lime-400 text-stone-900 px-2 font-bold">Interests:</span
-        > Physics and Mathematics, its a never ending story of my love and hate realtionship
-        but what matters is I truly love it.
-      </p> -->
       <p>
         I'm Tausif Alam - <span class="underline text-lime-400">Software Engineer</span> based in Delhi, India. I build stuff and definitely can build one for you. You got an idea I got the skills
         feel free to reach out to me on my email <a
@@ -49,6 +24,7 @@ import swissKnife from "@res/images/icons/swiss_knife.svg";
         > or you can DM me on my instagram <a href="https://www.instagram.com/bsh_tausif/" target="_blank" class="text-lime-400">@bsh_tausif</a>.
         Explore my articles or scroll to know more.
       </p>
+      <ProjectShowcase />
       <!-- Skills (in my forge) -->
       <div class="skill-heading flex flex-row items-center gap-4 my-8">
         <Image
@@ -82,9 +58,6 @@ import swissKnife from "@res/images/icons/swiss_knife.svg";
           },
         ]}
       />
-
-      <ProjectShowcase />
-
       <!-- Education timeline -->
       <p class="mt-8">
         <span class="bg-lime-400 text-stone-900 px-2 font-bold"
@@ -159,4 +132,5 @@ import swissKnife from "@res/images/icons/swiss_knife.svg";
       </ul>
     </div>
   </div>
+  <Featured slot="featuredWidget" />
 </Layout>
