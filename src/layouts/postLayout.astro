@@ -19,6 +19,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 
 <html lang="en">
   <head>
+    <!-- Google tag (gtag.js) -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-BP8897NSS7"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-BP8897NSS7");
+    </script>
     <meta charset="utf-8" />
     <title>{title}</title>
     <!-- basic metadata -->
