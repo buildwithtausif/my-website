@@ -7,8 +7,9 @@ const latestPosts = allBlogPosts
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 2);
 ---
+
 <h1 class="text-lg mb-4 text-lime-400 text-center">
-    <span class="press-start-2p-regular">Latest Posts</span>
+  <span class="press-start-2p-regular">Latest Posts</span>
 </h1>
 <div class="flex flex-col gap-4 items-center">
   {
@@ -51,7 +52,9 @@ const latestPosts = allBlogPosts
     background-color: oklch(84.1% 0.238 128.85);
     color: black;
     padding: 8px;
-    clip-path: inset(-1px -1px -1px 100%); /* fully clipped (invisible) by default */
+    clip-path: inset(
+      -1px -1px -1px 100%
+    ); /* fully clipped (invisible) by default */
   }
   @keyframes growRight {
     from {

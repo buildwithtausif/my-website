@@ -65,3 +65,27 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+  --color-lime-900: #00051a;
+}
+
+html.day-mode .scanline-bg {
+  background-color: #ffffff;
+}
+html.day-mode .scanline-bg::before {
+  /* darker lines for day mode */
+  background-image: linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+}
+
+html.day-mode img,
+html.day-mode video {
+  /* Re-invert images if necessary, wait, we are NOT using CSS filter invert on the whole body, 
+     we are just remapping CSS variables, so images won't be inverted!
+     Hence we don't need any image override. */
+}
+

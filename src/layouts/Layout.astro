@@ -9,20 +9,24 @@ import SmoothScrollIsland from "@components/SmoothScrollIsland";
 import ScrollToBottom from "@components/ScrollToBottom.astro";
 // images
 import dustin from "@res/images/dustin.jpg";
-import ogImage from "@res/images/ogbanner.webp";
+import { getSEOForPath } from "@utils/seoConfig";
+
+const seo = getSEOForPath(Astro.url.pathname);
+
 // metadata
 interface Props {
-  title: string;
+  title?: string;
   desc?: string;
   keywords?: string;
 }
 
 const {
-  title = "Tausif Alam | Software Engineer",
-  desc = "Tausif Alam (buildwithtausif) is a backend-focused software engineer building scalable applications with Node.js, PostgreSQL, and modern web tech.",
-  keywords = "buildwithtausif, Tausif Alam, Tausif Alam portfolio, software engineer, full stack developer, Node.js developer, backend developer, web developer, system design, freelancer, bsh_tausif",
+  title = seo.title,
+  desc = seo.desc,
+  keywords = seo.keywords,
 } = Astro.props as Props;
-const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const pathname = Astro.url.pathname.replace(/\/$/, "");
+const canonical = new URL(pathname || "/", Astro.site).toString();
 console.log(canonical);
 ---
 
@@ -59,19 +63,19 @@ console.log(canonical);
     <meta property="og:url" content={canonical} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:image" content={ogImage.src} />
-    <meta property="og:image:width" content={ogImage.width.toString()} />
-    <meta property="og:image:height" content={ogImage.height.toString()} />
-    <meta property="og:image:type" content={ogImage.format} />
+    <meta property="og:image" content={seo.image?.src} />
+    <meta property="og:image:width" content={seo.image?.width.toString()} />
+    <meta property="og:image:height" content={seo.image?.height.toString()} />
+    <meta property="og:image:type" content={seo.image?.format} />
     <meta property="og:image:alt" content={title} />
     <!-- twitter card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={desc} />
-    <meta name="twitter:image" content={ogImage.src} />
-    <meta name="twitter:image:width" content={ogImage.width.toString()} />
-    <meta name="twitter:image:height" content={ogImage.height.toString()} />
-    <meta name="twitter:image:type" content={ogImage.format} />
+    <meta name="twitter:image" content={seo.image?.src} />
+    <meta name="twitter:image:width" content={seo.image?.width.toString()} />
+    <meta name="twitter:image:height" content={seo.image?.height.toString()} />
+    <meta name="twitter:image:type" content={seo.image?.format} />
     <meta name="twitter:image:alt" content={title} />
   </head>
   <body class="min-h-screen scanline-bg">
