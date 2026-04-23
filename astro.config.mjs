@@ -11,7 +11,7 @@ import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://buildwithtausif.in",
+  site: "https://buildwithtausif.in/",
   trailingSlash: "never",
   vite: {
     plugins: [tailwindcss()],
