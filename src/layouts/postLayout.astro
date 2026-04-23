@@ -53,7 +53,6 @@ const canonical = new URL(pathname || "/", Astro.site).toString();
     <meta property="og:title" content={title} />
     <meta property="og:description" content={desc} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
     <!-- conditional og:image for project and blog pages -->
     <meta property="og:image" content={image?.src} />

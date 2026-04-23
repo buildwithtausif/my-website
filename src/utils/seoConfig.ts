@@ -15,9 +15,9 @@ export interface SEOProps {
  * Global default SEO Configuration
  */
 export const globalSEO: SEOProps = {
-  title: "Tausif Alam | Full Stack Developer",
-  desc: "Tausif Alam (buildwithtausif) is a backend-focused software engineer building scalable applications with Node.js, PostgreSQL, and modern web tech.",
-  keywords: "buildwithtausif, Tausif Alam, Tausif Alam portfolio, software engineer, full stack developer, Node.js developer, backend developer, web developer, system design, freelancer, bsh_tausif",
+  title: "Tausif Alam – Backend & Full Stack Developer",
+  desc: "Backend-focused engineer building scalable apps with Node.js and PostgreSQL. Explore Tausif Alam’s projects and portfolio.",
+  keywords: "Tausif Alam, buildwithtausif, backend developer, Node.js developer, full stack developer, PostgreSQL, web developer portfolio, system design, software engineer India",
   type: "website",
   image: defaultOgImage,
 };
@@ -29,17 +29,17 @@ export const globalSEO: SEOProps = {
 export const pageSEOConfig: Record<string, Partial<SEOProps>> = {
   // Home page uses the global defaults completely, but you can override here
   "/": {
-    title: "Tausif Alam | Full Stack Developer",
+    title: "Tausif Alam – Backend & Full Stack Developer",
   },
   "/projects": {
-    title: "Projects | buildwithtausif",
-    desc: "Showcase of all my built projects from tiny to huge, frontend to backend.",
+    title: "Projects – Tausif Alam | Full Stack & Backend Work",
+    desc: "Explore Tausif Alam’s projects, from backend systems to full stack apps built with Node.js, PostgreSQL, and modern web tech.",
     image: ogImageProjects,
   },
   "/blog": {
-    title: "Tausif's Blog | delving into code, life and everything in between",
-    desc: "A blog to share learnings, going deeper into decision making and decoding the system thinker and sometimes insights from life and books.",
-    keywords: "buildwithtausif, developer blog, dev blog, tausif's blog, tausif alam blog, bsh_tausif",
+    title: "Tausif's Blog – Code, Systems & Insights",
+    desc: "Developer blog by Tausif Alam on coding, system design, decisions, and lessons from projects, tech, and life.",
+    keywords: "Tausif Alam blog, developer blog, system design, Node.js blog, backend development, programming insights, buildwithtausif",
     image: ogImageBlog,
   }
 };

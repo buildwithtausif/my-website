@@ -9,7 +9,7 @@ import countReadingMinutes from "@utils/readingMin";
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
   return posts.map((post) => ({
-    params: { slug: createSlug(post.data.title) },
+    params: { slug: createSlug(post.id) },
     props: { post },
   }));
 }
@@ -38,7 +38,8 @@ const { Content } = await render(post);
         by <span
           >{post.data.author}
           <br /> On: {post.data.pubDate.toISOString().slice(0, 10)}
-          <br /> {countReadingMinutes(post.body?.match(/\S+/g)?.length || 0)} min read</span
+          <br />
+          {countReadingMinutes(post.body?.match(/\S+/g)?.length || 0)} min read</span
         >
       </div>
       <div class="content min-w-[80%] prose prose-invert lg:prose-xl">

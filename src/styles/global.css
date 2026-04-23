@@ -65,8 +65,6 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
-  --color-lime-900: #00051a;
-}
 
 html.day-mode .scanline-bg {
   background-color: #ffffff;

@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BlogLayout from "@layouts/blogLayout.astro";
+import UpsideDown from "@components/UpsideDown.astro";
 import { Check, Folder } from "lucide-react";
 import createSlug from "@utils/createSlug";
 import countReadingMinutes from "@utils/readingMin";
@@ -24,6 +25,9 @@ const sortedTags = Object.entries(tagsCount).sort((a, b) => a[0].localeCompare(b
 ---
 
 <BlogLayout>
+  {posts.length === 0 ? (
+    <UpsideDown type="posts" />
+  ) : (
   <!-- Full wrapper for exactly matching design aesthetics -->
   <div class="max-w-310 mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-24 font-sans text-neutral-300">
     
@@ -86,7 +90,7 @@ const sortedTags = Object.entries(tagsCount).sort((a, b) => a[0].localeCompare(b
       <div class="md:col-span-2 col-span-1 flex flex-col pt-0 md:pt-0" id="articles-list">
         {posts.map((post) => (
           <a 
-            href={`/blog/${createSlug(post.data.title)}/`} 
+            href={`/blog/${createSlug(post.id)}`} 
             class="article-card group block border-b border-[#333] last:border-b-0 hover:bg-white/2 transition-colors relative px-2 -mx-2 md:mx-0 md:px-0"
             data-tags={post.data.tags ? post.data.tags.map(t => t.toLowerCase()).join(',') : ''}
           >
@@ -126,6 +130,7 @@ const sortedTags = Object.entries(tagsCount).sort((a, b) => a[0].localeCompare(b
       
     </div>
   </div>
+  )}
 </BlogLayout>
 
 <script>

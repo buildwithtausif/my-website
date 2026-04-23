@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BlogLayout from "@layouts/blogLayout.astro";
+import UpsideDown from "@components/UpsideDown.astro";
 import createSlug from "@utils/createSlug";
 
 // sort according to the latest publishing date
@@ -21,7 +22,10 @@ const tagsCount = projects.reduce((acc, project) => {
 const sortedTags = Object.entries(tagsCount).sort((a, b) => a[0].localeCompare(b[0]));
 ---
 
-<BlogLayout title="Projects | buildwithtausif" desc="Showcase of all my built projects from tiny to huge, frontend to backend.">
+<BlogLayout>
+  {projects.length === 0 ? (
+    <UpsideDown type="projects" />
+  ) : (
   <div class="max-w-310 mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-24 font-sans text-neutral-300">
     
     <!-- Header row -->
@@ -64,51 +68,53 @@ const sortedTags = Object.entries(tagsCount).sort((a, b) => a[0].localeCompare(b
       </div>
 
       <!-- Right Area: Projects List -->
+      <!-- Right Area: Projects List -->
       <div class="md:col-span-1 pt-6 md:pt-0 pb-12" id="projects-list">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
-          {projects.map((project) => (
-            <div 
-              class="project-card group flex flex-col justify-between bg-[#111] border border-[#333] hover:border-lime-400/30 rounded-lg p-5 transition-all duration-300 relative overflow-hidden"
-              data-tags={project.data.tags ? project.data.tags.map(t => t.toLowerCase()).join(',') : ''}
-              data-year={project.data.pubDate.getFullYear()}
-            >
-              <!-- Hover gradient effect -->
-              <div class="absolute -right-10 -top-10 w-32 h-32 bg-lime-400/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
+            {projects.map((project) => (
+              <div 
+                class="project-card group flex flex-col justify-between bg-[#111] border border-[#333] hover:border-lime-400/30 rounded-lg p-5 transition-all duration-300 relative overflow-hidden"
+                data-tags={project.data.tags ? project.data.tags.map(t => t.toLowerCase()).join(',') : ''}
+                data-year={project.data.pubDate.getFullYear()}
+              >
+                <!-- Hover gradient effect -->
+                <div class="absolute -right-10 -top-10 w-32 h-32 bg-lime-400/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 
-              <div class="relative z-10">
-                <div class="flex items-start justify-between mb-3">
-                  <h3 class="text-xl font-bold text-neutral-100 m-0 group-hover:text-lime-400 transition-colors">
-                    <a href={`/project/${createSlug(project.data.title)}/`} class="focus:outline-none">
-                      <span class="absolute inset-0" aria-hidden="true"></span>
-                      {project.data.title}
-                    </a>
-                  </h3>
-                  <div class="flex flex-col items-end gap-1">
-                     <span class="inline-flex items-center rounded-sm bg-zinc-800/80 px-2.5 py-0.5 text-[10px] font-mono font-medium text-zinc-400 ring-1 ring-inset ring-zinc-700/50 uppercase">
-                       {project.data.pubDate.getFullYear()}
-                     </span>
+                <div class="relative z-10">
+                  <div class="flex items-start justify-between mb-3">
+                    <h3 class="text-xl font-bold text-neutral-100 m-0 group-hover:text-lime-400 transition-colors">
+                      <a href={`/project/${createSlug(project.id)}`} class="focus:outline-none">
+                        <span class="absolute inset-0" aria-hidden="true"></span>
+                        {project.data.title}
+                      </a>
+                    </h3>
+                    <div class="flex flex-col items-end gap-1">
+                       <span class="inline-flex items-center rounded-sm bg-zinc-800/80 px-2.5 py-0.5 text-[10px] font-mono font-medium text-zinc-400 ring-1 ring-inset ring-zinc-700/50 uppercase">
+                         {project.data.pubDate.getFullYear()}
+                       </span>
+                    </div>
                   </div>
+                  
+                  <p class="text-sm text-neutral-400 line-clamp-3 mb-5 font-sans leading-relaxed">
+                    {project.data.description}
+                  </p>
                 </div>
-                
-                <p class="text-sm text-neutral-400 line-clamp-3 mb-5 font-sans leading-relaxed">
-                  {project.data.description}
-                </p>
-              </div>
 
-              <div class="relative z-10 flex flex-wrap items-center gap-2 mt-auto">
-                {project.data.tags.map((tag: string) => (
-                  <span class="inline-flex items-center bg-zinc-800/50 px-2 py-0.5 text-[10px] font-medium text-zinc-300 uppercase tracking-widest border border-zinc-700">
-                    {tag}
-                  </span>
-                ))}
+                <div class="relative z-10 flex flex-wrap items-center gap-2 mt-auto">
+                  {project.data.tags.map((tag: string) => (
+                    <span class="inline-flex items-center bg-zinc-800/50 px-2 py-0.5 text-[10px] font-medium text-zinc-300 uppercase tracking-widest border border-zinc-700">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
       </div>
       
     </div>
   </div>
+  )}
 </BlogLayout>
 
 <script>

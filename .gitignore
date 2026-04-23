@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # vscode setting folder
 .vscode
+
+# ignore obsidian files
+src/content/.obsidian

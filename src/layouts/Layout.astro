@@ -27,7 +27,6 @@ const {
 } = Astro.props as Props;
 const pathname = Astro.url.pathname.replace(/\/$/, "");
 const canonical = new URL(pathname || "/", Astro.site).toString();
-console.log(canonical);
 ---
 
 <html lang="en">

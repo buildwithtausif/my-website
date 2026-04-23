@@ -1,30 +1,50 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import createSlug from "@utils/createSlug";
 
 const allBlogPosts = await getCollection("blog");
-const latestPosts = allBlogPosts
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 2);
+const allProjects = await getCollection("project");
+
+let displayPosts: (CollectionEntry<"blog"> | CollectionEntry<"project">)[] =
+  allBlogPosts
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .slice(0, 2);
+
+let isProject = false;
+if (displayPosts.length === 0) {
+  displayPosts = allProjects
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .slice(0, 1);
+  isProject = true;
+}
 ---
 
-<h1 class="text-lg mb-4 text-lime-400 text-center">
-  <span class="press-start-2p-regular">Latest Posts</span>
-</h1>
-<div class="flex flex-col gap-4 items-center">
-  {
-    latestPosts.map((post) => (
-      <a
-        href={`/blog/${createSlug(post.data.title)}`}
-        class="block no-underline"
-      >
-        <div class="card-board" data-topic={post.data.title}>
-          <div class="topic-name">{post.data.title}</div>
-        </div>
-      </a>
-    ))
-  }
-</div>
+{
+  displayPosts.length > 0 && (
+    <>
+      <h1 class="text-lg mb-4 text-lime-400 text-center">
+        <span class="press-start-2p-regular">Latest Posts</span>
+      </h1>
+      <div class="flex flex-col gap-4 items-center">
+        {displayPosts.map((post) => (
+          <a
+            href={`/${isProject ? "project" : "blog"}/${createSlug(post.id)}`}
+            class="block no-underline"
+          >
+            <div
+              class="card-board"
+              data-topic={isProject ? post.data.description : post.data.title}
+            >
+              <div class="topic-name">
+                {isProject ? post.data.description : post.data.title}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </>
+  )
+}
 <style>
   .card-board {
     border: 2px solid oklch(84.1% 0.238 128.85);

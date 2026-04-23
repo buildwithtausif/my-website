@@ -1,0 +1,172 @@
+---
+interface Props {
+  type: "posts" | "projects" | "404" | "500";
+}
+const { type } = Astro.props;
+
+let title = "The Upside Down";
+let message = "";
+let subtitle = "Check back later";
+
+if (type === "posts") {
+  message = `"Mornings are for coffee and contemplation... but currently, there are no posts to contemplate."`;
+} else if (type === "projects") {
+  message = `"Mornings are for coffee and contemplation... but currently, there are no projects to contemplate."`;
+} else if (type === "404") {
+  title = "404 - Not Found";
+  message = `"Friends don't lie. But this link did... the page you're looking for is nowhere to be found in this dimension."`;
+  subtitle = "Return to Hawkins ([H] Home)";
+} else if (type === "500") {
+  title = "500 - Server Error";
+  message = `"Something is coming... something hungry for blood. A shadow is growing on the wall, and our servers are currently down."`;
+  subtitle = "Code Red - Try Again Later";
+}
+
+const generateShadows = (count: number) => {
+  let shadows = [];
+  for (let i = 0; i < count; i++) {
+    const x = Math.floor(Math.random() * 2000);
+    const y = Math.floor(Math.random() * 2000);
+    // Ash flakes are somewhat grayish/white with random opacity
+    shadows.push(`${x}px ${y}px rgba(180, 180, 180, ${Math.random() * 0.6 + 0.2})`);
+  }
+  return shadows.join(', ');
+};
+
+const shadowsSmall = generateShadows(700);
+const shadowsMedium = generateShadows(300);
+const shadowsLarge = generateShadows(100);
+---
+
+<div class="upside-down-container">
+  <div id="ash1"></div>
+  <div id="ash2"></div>
+  <div id="ash3"></div>
+
+  <!-- Dark atmospheric vignette overlay -->
+  <div class="vignette"></div>
+
+  <div class="relative z-10 flex flex-col items-center text-center px-4">
+    <h2 class="text-5xl md:text-7xl font-extrabold text-neutral-300 mb-6 tracking-tighter opacity-80 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+      {title}
+    </h2>
+    <p class="text-xl md:text-2xl font-sans text-neutral-400 italic mb-10 max-w-2xl leading-relaxed">
+      {message}
+    </p>
+    <div class="w-16 h-1 bg-lime-400/30 rounded-full mb-6"></div>
+    {["404", "500"].includes(type) ? (
+      <a href="/" class="text-sm font-mono text-lime-400 uppercase tracking-widest opacity-90 hover:underline">
+        {subtitle}
+      </a>
+    ) : (
+      <p class="text-sm font-mono text-neutral-500 uppercase tracking-widest opacity-80">
+        {subtitle}
+      </p>
+    )}
+  </div>
+</div>
+
+<style define:vars={{ shadowsSmall, shadowsMedium, shadowsLarge }}>
+  .upside-down-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 40;
+    background: radial-gradient(circle at center, #0a0a0a 0%, #000 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.8) 100%);
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  #ash1 {
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: var(--shadowsSmall);
+    animation: animAsh 80s linear infinite;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+  #ash1:after {
+    content: " ";
+    position: absolute;
+    top: 2000px;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: var(--shadowsSmall);
+  }
+
+  #ash2 {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: var(--shadowsMedium);
+    animation: animAsh 120s linear infinite;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+  }
+  #ash2:after {
+    content: " ";
+    position: absolute;
+    top: 2000px;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: var(--shadowsMedium);
+  }
+
+  #ash3 {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: var(--shadowsLarge);
+    animation: animAsh 150s linear infinite;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    filter: blur(1px); /* Larger particles closer to camera are slightly blurry */
+  }
+  #ash3:after {
+    content: " ";
+    position: absolute;
+    top: 2000px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: var(--shadowsLarge);
+  }
+
+  /* Animating slowly upwards and slightly sideways to simulate floating ash */
+  @keyframes animAsh {
+    from {
+      transform: translateY(0px) translateX(0px);
+    }
+    to {
+      transform: translateY(-2000px) translateX(100px);
+    }
+  }
+</style>
