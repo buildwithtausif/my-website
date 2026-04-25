@@ -1,7 +1,7 @@
 ---
 import { getSEOForPath } from "@utils/seoConfig";
 const seo = getSEOForPath(Astro.url.pathname);
-import pfp from "@res/images/pfp.jpg";
+import pfp from "@res/images/pfp.webp";
 
 const personSchema = {
   "@context": "https://schema.org",
@@ -9,6 +9,20 @@ const personSchema = {
   name: "Tausif Alam",
   gender: "Male",
   jobTitle: "Software Engineer",
+  hasOccupation: [
+    {
+      "@type": "Occupation",
+      name: "Software Engineer",
+    },
+    {
+      "@type": "Occupation",
+      name: "Freelance Web Developer",
+    },
+    {
+      "@type": "Occupation",
+      name: "Full Stack Developer",
+    },
+  ],
   url: "https://buildwithtausif.in",
   description: `${seo.desc}`,
   sameAs: [
@@ -19,6 +33,7 @@ const personSchema = {
     "https://www.instagram.com/bsh_tausif/",
     "https://peerlist.io/buildwithtausif",
     "https://bsky.app/profile/buildwithtausif.in",
+    "https://www.reddit.com/user/opsX9/",
   ],
   alternateName: ["tausif alam", "buildwithtausif", "tausif", "bsh_tausif"],
   nationality: "Indian",
@@ -74,12 +89,12 @@ const personSchema = {
   ],
   address: {
     "@type": "PostalAddress",
-    "addressLocality": "New Delhi",
-    "addressRegion": "DL",
-    "postalCode": "110033",
-    "addressCountry": "IN",
-    "streetAddress": "Adarsh Nagar, Azadpur, Model Town, Netaji Subhash Place - NSP, Wazirpur, Delhi",
-
+    addressLocality: "New Delhi",
+    addressRegion: "DL",
+    postalCode: "110033",
+    addressCountry: "IN",
+    streetAddress:
+      "Adarsh Nagar, Azadpur, Model Town, Netaji Subhash Place - NSP, Wazirpur, Delhi",
   },
   image: `${Astro.props.url}${pfp.src}`,
 };
@@ -104,3 +119,6 @@ const personSchema = {
   set:html={JSON.stringify(personSchema)}
   is:inline
 />
+<!-- favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" href="/favicon.ico" />
