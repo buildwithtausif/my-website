@@ -7,6 +7,7 @@ import Socials from "@components/socials.astro";
 import Footer from "@components/footer.astro";
 import SmoothScrollIsland from "@components/SmoothScrollIsland";
 import ScrollToBottom from "@components/ScrollToBottom.astro";
+import BaseLayout from "./baseLayour.astro";
 // images
 import dustin from "@res/images/dustin.jpg";
 import { getSEOForPath } from "@utils/seoConfig";
@@ -31,20 +32,7 @@ const canonical = new URL(pathname || "/", Astro.site).toString();
 
 <html lang="en">
   <head>
-    <!-- Google Tag Manager -->
-    <script is:inline>
-      (function (w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != "dataLayer" ? "&l=" + l : "";
-        j.async = true;
-        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, "script", "dataLayer", "GTM-5J5KDXHK");
-    </script>
-    <!-- End Google Tag Manager -->
+    <BaseLayout url={Astro.url.origin} />
     <meta charset="utf-8" />
     <title>{title}</title>
     <!-- basic metadata -->
