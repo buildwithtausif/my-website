@@ -16,26 +16,26 @@ import brainstorm from "@res/images/content_images/blog/litengine_brainstorm.png
 import dbschema from "@res/images/content_images/blog/litengine_dbschema.png";
 
 # The road to robustness
-When I was given to make a library management system, first thing came into my mind is "Seriously? its a cliche project!" but since
+When I was tasked to make a library management system, the first thing that came into my mind was "Seriously? It's a cliche project!" but since
 it was the requirement for my college's tech society - as a token of test, I decided to make it but not the usual way.
-mostly the library management system is primarily about basic CRUD operations, no place for handling edge cases
-like "What if? two users try to borrow the same book in milliseconds of interval? who will get the book then?" or "What if there is conflicting data in the database?"
-these questions made me to think not just about CRUD but also about the architecture of the system.
+Mostly, a library management system is primarily about basic CRUD operations, no place for handling edge cases
+like "What if two users try to borrow the same book in milliseconds of interval? Who will get the book then?" or "What if there is conflicting data in the database?"
+These questions made me think not just about CRUD but also about the architecture of the system.
 
-after rigourous scribbles on paper, I've made the following database schema which I found to be robust enough to handle the edge cases.
+After rigorous scribbles on paper, I've made the following database schema which I found to be robust enough to handle the edge cases.
 <Image src={dbschema} alt="Database Schema" />
 
 # Why this schema?
-The schema prior to the current one was a mess, not becuase it couldn't handle the edge-cases but because it was not even
-able to handle the foriegn key constraints properly. notice the current schema it implements soft deletes for users, inventory (which is an additional layer)
-between books and bookloans and the books table itself made independent and restricted any delete operation on it - it behaves like a central lobby
+The schema prior to the current one was a mess, not because it couldn't handle the edge cases but because it was not even
+able to handle the foreign key constraints properly. Notice the current schema, it implements soft deletes for users, inventory (which is an additional layer)
+between books and book loans, and the books table itself made independent and restricted any delete operation on it - it behaves like a central lobby
 or an attic of books where books are kept and never thrown away, only their status is updated. Why? because I wanted to build a system where the librarian simply
 adds list of ISBNs and the system automatically fetches the book details from the central repository of books (for speed) and if not found then from Google Books API and adds them to the database. 
 this feature is not implemented yet but the books table acts as a central repository for books as of now.
 
 # The case of conflict
-the simple case where user-1 tries to update his/her email but the provided email is already taken by some user-x in that case 
-i need to handle the conflicting case and prompt that the email is already taken by some user-x.
+The simple case where user-1 tries to update his/her email but the provided email is already taken by some user-x, in that case 
+I need to handle the conflicting case and prompt that the email is already taken by some user-x.
 To achieve this I came up with the idea of making a separate utility "conflict_handler" which would scan the database for conflicts before any write operation.
 
 <Image src={brainstorm} alt="Brainstorm" />
@@ -45,13 +45,13 @@ import CodeBlock from "@components/CodeBlock.astro";
 <CodeBlock lang="javascript">
 ```
 import db, { pgp } from "../models/db.mjs";
-// define confilicting data
-/* A confilicting data is any data that meatches already existing 
-entity in the server on recieving the same from client. */
+// define conflicting data
+/* A conflicting data is any data that matches already existing 
+entity in the server on receiving the same from client. */
 
 /*
     idea is to pass table_name and col_name into this function 
-    as parameters and the function will check for the recieved_data into server_col
+    as parameters and the function will check for the received_data into server_col
     if found match it will throw a 409 response code of "CONFLICT"
 */
 
@@ -100,7 +100,7 @@ export default async function recordExist({
     colName: colName,
     value: value,
   };
-  // if an exlusion is provided add it the the query template and make one more parameter named excludeID
+  // if an exclusion is provided add it to the query template and make one more parameter named excludeID
   if (excludeID !== null) {
     query_template += ` AND user_id != $[excludeID]`;
     params.excludeID = excludeID;
@@ -146,7 +146,7 @@ import operations from "@res/images/content_images/blog/operations.png";
 
 <Image src={operations} alt="Operations" />
 
-you can explore more and can even play with it on [litengine](https://litengine.vercel.app/) or 
-check out its documentation on [litengine docs](https://litengine.vercel.app/docs) or the code on [github](https://github.com/buildwithtausif/litengine)
-that's a wrap there is more in it than I could write in a single blog post. 
-stay tuned :) bye
+You can explore more and can even play with it on [litengine](https://litengine.vercel.app/) or 
+check out its documentation on [litengine docs](https://litengine.vercel.app/docs) or the code on [github](https://github.com/buildwithtausif/litengine).
+That's a wrap, there is more in it than I could write in a single blog post. 
+Stay tuned :) Bye
