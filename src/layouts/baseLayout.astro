@@ -72,6 +72,15 @@ const personSchema = {
       sameAs: "https://ipu.ac.in/",
     },
   ],
+  address: {
+    "@type": "PostalAddress",
+    "addressLocality": "New Delhi",
+    "addressRegion": "DL",
+    "postalCode": "110033",
+    "addressCountry": "IN",
+    "streetAddress": "Adarsh Nagar, Azadpur, Model Town, Netaji Subhash Place - NSP, Wazirpur, Delhi",
+
+  },
   image: `${Astro.props.url}${pfp.src}`,
 };
 ---
