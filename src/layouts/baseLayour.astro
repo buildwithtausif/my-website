@@ -1,0 +1,97 @@
+---
+import { getSEOForPath } from "@utils/seoConfig";
+const seo = getSEOForPath(Astro.url.pathname);
+import pfp from "@res/images/pfp.jpg";
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Tausif Alam",
+  gender: "Male",
+  jobTitle: "Software Engineer",
+  url: "https://buildwithtausif.in",
+  description: `${seo.desc}`,
+  sameAs: [
+    "https://github.com/buildwithtausif",
+    "https://www.linkedin.com/in/buildwithtausif/",
+    "https://x.com/buildwithtausif",
+    "https://buildwithtausif.vercel.app",
+    "https://www.instagram.com/bsh_tausif/",
+    "https://peerlist.io/buildwithtausif",
+    "https://bsky.app/profile/buildwithtausif.in",
+  ],
+  alternateName: ["tausif alam", "buildwithtausif", "tausif", "bsh_tausif"],
+  nationality: "Indian",
+  knowsLanguage: "English, Hindi",
+  knowsAbout: [
+    "Node.js",
+    "PostgreSQL",
+    "MySQL",
+    "MongoDB",
+    "Backend Development",
+    "Full Stack Development",
+    "System Design",
+    "Web Development",
+    "JavaScript",
+    "Typescript",
+    "React.js",
+    "Next.js",
+    "Astro",
+    "Tailwind Css",
+    "Git",
+    "Linux",
+    "Docker",
+    "Java",
+    "Python",
+    "DSA",
+    "Problem Solving",
+    "Data Structures",
+    "Algorithms",
+    "Computer Networks",
+    "Operating System",
+    "Database Management System",
+    "Software Engineering",
+    "API Development",
+    "Microservices",
+    "RESTful APIs",
+    "GraphQL",
+    "CI/CD",
+    "DevOps",
+    "SEO",
+    "Technical SEO",
+  ],
+  alumniOf: [
+    {
+      "@type": "CollegeOrUniversity",
+      name: "Vivekananda Institute of Professional Studies",
+      sameAs: "https://vips.edu/",
+    },
+    {
+      "@type": "CollegeOrUniversity",
+      name: "Guru Gobind Singh Indraprastha University",
+      sameAs: "https://ipu.ac.in/",
+    },
+  ],
+  image: `${Astro.props.url}${pfp.src}`,
+};
+---
+
+<!-- Google Tag Manager -->
+<script is:inline>
+  (function (w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+    var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s),
+      dl = l != "dataLayer" ? "&l=" + l : "";
+    j.async = true;
+    j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+    f.parentNode.insertBefore(j, f);
+  })(window, document, "script", "dataLayer", "GTM-5J5KDXHK");
+</script>
+<!-- End Google Tag Manager -->
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(personSchema)}
+  is:inline
+/>
