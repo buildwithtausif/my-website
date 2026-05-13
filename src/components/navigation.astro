@@ -1,69 +1,195 @@
 ---
-import '../styles/global.css'
+import "../styles/global.css";
+
+export interface Props {
+  modernNav?: boolean;
+}
+
+const { modernNav = false } = Astro.props;
+
+// Determine current normalized path
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+
+const allLinks = [
+  {
+    href: Astro.site ? Astro.site.toString() : "/",
+    matchPath: "/",
+    key: "h",
+    label: "[H] home",
+    isPill: false,
+  },
+  {
+    href: Astro.site ? new URL("blog", Astro.site).toString() : "/blog",
+    matchPath: "/blog",
+    key: "b",
+    label: "[B] Blog",
+    isPill: false,
+  },
+  {
+    href: Astro.site ? new URL("projects", Astro.site).toString() : "/projects",
+    matchPath: "/projects",
+    key: "p",
+    label: "[P] Projects",
+    isPill: false,
+  },
+  {
+    href: "#",
+    matchPath: "/resume",
+    key: "r",
+    label: "[R] Resume",
+    isPill: true,
+  },
+];
+
+// Hide the link if we are already on that page
+const links = allLinks.filter((l) => l.matchPath !== currentPath);
+const regularLinks = links.filter((l) => !l.isPill);
+const resumeLink = links.find((l) => l.isPill);
 ---
-<div class="nav z-50 sticky top-2.5 grid grid-cols-none md:grid-flow-col md:grid-cols-1">
-    <ul class="flex flex-wrap gap-1.5 m-2.5 rounded-xs">
+
+{
+  modernNav ? (
+    <div class="sticky top-4 w-full flex justify-center z-50 px-4 pointer-events-none mb-8">
+      <nav class="modern-nav relative pointer-events-auto bg-stone-900/70 backdrop-blur-2xl border border-white/10 rounded-3xl flex items-center p-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.5)] max-w-3xl w-auto overflow-hidden transition-all duration-300">
+        {/* Scrollable Container for small screens */}
+        <div class="flex items-center gap-2 sm:gap-4 overflow-x-auto hide-scrollbar px-1">
+          {/* Left Side: Resume Pill */}
+          {resumeLink && (
+            <a
+              href={resumeLink.href}
+              data-nav-key={resumeLink.key}
+              class="flex items-center px-4 py-1.5 sm:px-5 sm:py-2 bg-lime-400 text-stone-950 font-mono text-[13px] sm:text-sm rounded-2xl font-bold hover:bg-lime-300 transition-colors shrink-0"
+            >
+              {resumeLink.label}
+            </a>
+          )}
+
+          {/* Regular Links */}
+          <ul class="flex items-center gap-1 sm:gap-2 shrink-0">
+            {regularLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  data-nav-key={link.key}
+                  class="px-3 py-2 text-[13px] sm:text-sm font-mono text-zinc-300 hover:text-white hover:bg-white/10 rounded-2xl transition-colors flex items-center whitespace-nowrap"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+    </div>
+  ) : (
+    <div class="nav z-50 sticky top-2.5 grid grid-cols-none md:grid-flow-col md:grid-cols-1">
+      <ul class="flex flex-wrap gap-1.5 m-2.5 rounded-xs">
         <li class="font-black">bsh</li>
-        <li><a href={Astro.site} data-nav-key="h">[H] home</a></li>
-        <li><a href={Astro.site + "./blog"} data-nav-key="b">[B] Blog</a></li>
-        <li><a href={Astro.site + "./projects"} data-nav-key="p">[P] Projects</a></li>
-        <li><a href="#" data-nav-key="r">[R] Resume</a></li>
-    </ul>
-</div>
+        <li>
+          <a href={Astro.site} data-nav-key="h">
+            [H] home
+          </a>
+        </li>
+        <li>
+          <a
+            href={Astro.site ? Astro.site + "./blog" : "./blog"}
+            data-nav-key="b"
+          >
+            [B] Blog
+          </a>
+        </li>
+        <li>
+          <a
+            href={Astro.site ? Astro.site + "./projects" : "./projects"}
+            data-nav-key="p"
+          >
+            [P] Projects
+          </a>
+        </li>
+        <li>
+          <a href="#" data-nav-key="r">
+            [R] Resume
+          </a>
+        </li>
+      </ul>
+    </div>
+  )
+}
+
 <style>
-    .nav ul li{
-        text-decoration: none;
-        font-family: var(--font-mono);
-        text-transform: capitalize;
-        padding: 2.5px 5px;
-        background-color: --alpha(var(--color-stone-600) / 65%);
-        backdrop-filter: blur(2.5px);
-        color: var(--color-zinc-200);
-        border-radius: var(--radius-xs);
-        font-size: var(--text-sm);
-        cursor: pointer;
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .hide-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .nav ul li {
+    text-decoration: none;
+    font-family: var(--font-mono);
+    text-transform: capitalize;
+    padding: 2.5px 5px;
+    background-color: --alpha(var(--color-stone-600) / 65%);
+    backdrop-filter: blur(2.5px);
+    color: var(--color-zinc-200);
+    border-radius: var(--radius-xs);
+    font-size: var(--text-sm);
+    cursor: pointer;
+  }
+  .nav ul li:nth-child(1):not(.nav ul li:nth-child(3)) {
+    background-color: var(--color-lime-400);
+    color: var(--color-slate-900);
+    text-transform: lowercase;
+  }
+  .nav ul li:not(:nth-child(1)):hover,
+  .nav ul li:nth-child(3):hover {
+    background-color: --alpha(var(--color-lime-400) / 65%);
+    color: var(--color-white);
+  }
+  .nav ul li:last-child {
+    background-color: var(--color-lime-400);
+    color: var(--color-slate-900);
+    /* add glowing animation to it */
+    animation: glow 2s ease-in-out infinite;
+  }
+  @keyframes glow {
+    0% {
+      box-shadow: 0 0 5px var(--color-lime-400);
     }
-    .nav ul li:nth-child(1):not(.nav ul li:nth-child(3)) {
-        background-color: var(--color-lime-400);
-        color: var(--color-slate-900);
-        text-transform: lowercase;
+    50% {
+      box-shadow: 0 0 10px var(--color-lime-400);
     }
-    .nav ul li:not(:nth-child(1)):hover, .nav ul li:nth-child(3):hover  {
-        background-color: --alpha(var(--color-lime-400) / 65%);
-        color:  var(--color-white);
+    100% {
+      box-shadow: 0 0 5px var(--color-lime-400);
     }
-    .nav ul li:last-child {
-        background-color: var(--color-lime-400);
-        color: var(--color-slate-900);
-        /* add glowing animation to it */
-        animation: glow 2s ease-in-out infinite;
-    }
-    @keyframes glow {
-        0% {
-            box-shadow: 0 0 5px var(--color-lime-400);
-        }
-        50% {
-            box-shadow: 0 0 10px var(--color-lime-400);
-        }
-        100% {
-            box-shadow: 0 0 5px var(--color-lime-400);
-        }
-    }
+  }
 </style>
+
 <script>
-    document.addEventListener("keydown", (e) => {
-        // Ignore key presses if the user is typing in an input field or content editable
-        if (["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement).tagName) || (e.target as HTMLElement).isContentEditable) return;
+  document.addEventListener("keydown", (e) => {
+    // Ignore key presses if the user is typing in an input field or content editable
+    if (
+      ["INPUT", "TEXTAREA", "SELECT"].includes(
+        (e.target as HTMLElement).tagName,
+      ) ||
+      (e.target as HTMLElement).isContentEditable
+    )
+      return;
 
-        const key = e.key.toLowerCase();
-        const allowedKeys = ["h", "b", "p", "r"];
+    const key = e.key.toLowerCase();
+    const allowedKeys = ["h", "b", "p", "r"];
 
-        if (allowedKeys.includes(key)) {
-            // Find the anchor tag with the matching data-nav-key attribute
-            const link = document.querySelector(`a[data-nav-key="${key}"]`) as HTMLAnchorElement;
-            if (link) {
-                link.click();
-            }
-        }
-    });
+    if (allowedKeys.includes(key)) {
+      // Find the anchor tag with the matching data-nav-key attribute
+      const link = document.querySelector(
+        `a[data-nav-key="${key}"]`,
+      ) as HTMLAnchorElement;
+      if (link) {
+        link.click();
+      }
+    }
+  });
 </script>

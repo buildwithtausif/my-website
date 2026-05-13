@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { Image } from "astro:assets";
 import Layout from "@layouts/Layout.astro";
+import ScramblingTitle from "@components/ScramblingTitle.astro";
 import Featured from "@components/featured.astro";
 import Terminal from "@components/terminal.astro";
 import ProjectShowcase from "@components/ProjectShowcase.astro";
@@ -11,18 +12,56 @@ import swissKnife from "@res/images/icons/swiss_knife.svg";
 
 <Layout title="Tausif Alam | Full Stack Developer">
   <!-- for the bs people -->
-  <div slot="no-bs-zone" class="w-full flex flex-col gap-6 py-4">
-    <h1 class="press-start-2p-regular text-lime-400 text-2xl lg:text-3xl mt-4">
-      About me
-    </h1>
+  <div slot="no-bs-zone" class="w-full flex flex-col gap-6">
+    <ScramblingTitle
+      heading-1
+      fluidOnNewLine
+      id="scrambling-title"
+      class="press-start-2p-regular text-lime-400 text-2xl lg:text-3xl mt-4"
+      data-fixed-title={{
+        text: "Hey There,",
+        effect: "scramble",
+        renderFirst: true,
+      }}
+      data-fluid-text={{
+        0: { effect: "upslide", texts: ["Welcome to Oasis", "I'm Tausif"] },
+        1: {
+          effect: "braille",
+          texts: ["making backend that scales", "bringing ideas to life,"],
+        },
+        2: {
+          effect: "braille",
+          texts: [
+            "available for",
+            "freelance projects",
+            "ecommerce",
+            "web development",
+          ],
+        },
+      }}
+      run-infinite
+      run-delay={2000}
+    />
     <div class="prose prose-invert max-w-none text-zinc-300 leading-loose">
-      <p>
-        I'm Tausif Alam - <span class="underline text-lime-400">Software Engineer</span> based in Delhi, India. I build stuff and definitely can build one for you. You got an idea I got the skills
-        feel free to reach out to me on my email <a
-          href="mailto:connect.tausifalam@outlook.com?subject=[From%20Website]:[add your subject here]"
-          class="text-lime-400">connect.tausifalam@outlook.com</a
-        > or you can DM me on my instagram <a href="https://www.instagram.com/bsh_tausif/" target="_blank" class="text-lime-400">@bsh_tausif</a>.
-        Explore my articles or scroll to know more.
+      <p class="aboutme">
+        You’ve found my corner of the internet. I’m Tausif — a <b
+          class="text-lime-400">software engineer</b
+        > I share my thoughts, insights, projects and sometimes a philosophical rant, welcome to my oasis!
+        <br />
+        If you’re looking for someone to help bring your ideas to life, take a look
+        at my
+        <a href="/projects" class="text-lime-400">projects</a>
+        for a glimpse of what I build. And if you’d like to understand how I think,
+        check out my
+        <a href="/blog" class="text-lime-400">blog</a>.
+        <br />
+        Want to connect? Reach out via email —
+        <a
+          href="mailto:connect.tausifalam@outlook.com?subject=[FromWebsite]:[Please add your subject here]"
+          class="text-lime-400"
+        >
+          click here
+        </a>
       </p>
       <ProjectShowcase />
       <!-- Skills (in my forge) -->
