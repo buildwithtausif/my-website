@@ -1,0 +1,241 @@
+---
+import { VolumeX, Volume2, Play, Pause, SkipForward, SkipBack, ChevronLeft, ChevronRight } from "lucide-react";
+
+import audio1 from "@res/audio/clavier-music-reading-soft-piano-221781.mp3";
+import audio2 from "@res/audio/leberch-space-440026.mp3";
+import audio3 from "@res/audio/the_mountain-space-discovery-179468.mp3";
+
+const tracks = [
+  { src: audio1, name: "Soft Piano" },
+  { src: audio2, name: "Space Ambient" },
+  { src: audio3, name: "Mountain Discovery" },
+];
+---
+
+<div
+  id="music-player-container"
+  transition:persist="music-player"
+  class="fixed bottom-24 right-0 z-50 flex items-center transition-transform duration-500 translate-x-[calc(100%-4.5rem)] hover:translate-x-0 md:translate-x-[calc(100%-3rem)]"
+>
+  {/* Main Pill */}
+  <div class="bg-stone-900/70 backdrop-blur-2xl border border-white/10 rounded-l-3xl rounded-r-none flex items-center p-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.5)] h-12">
+    
+    {/* Mobile pull tab (part of the pill) */}
+    <button
+      id="music-mobile-toggle"
+      class="md:hidden flex items-center justify-center w-6 h-full text-zinc-300 hover:text-white transition-colors shrink-0 cursor-pointer"
+    >
+      <span id="music-chevron-left" class="block"><ChevronLeft size={18} /></span>
+      <span id="music-chevron-right" class="hidden"><ChevronRight size={18} /></span>
+    </button>
+
+    {/* Mute/Unmute Button (Always visible on edge) */}
+    <button
+      id="music-mute-toggle"
+      class="flex items-center justify-center w-9 h-9 rounded-2xl bg-lime-400 text-stone-950 hover:bg-lime-300 transition-colors shrink-0 cursor-pointer"
+    >
+      <span id="icon-muted" class="block"><VolumeX size={18} /></span>
+      <span id="icon-unmuted" class="hidden"><Volume2 size={18} /></span>
+    </button>
+
+    {/* Expanded Controls */}
+    <div class="flex items-center gap-3 px-4 w-48 opacity-0 transition-opacity duration-300" id="music-controls">
+      <button id="music-prev" class="text-zinc-300 hover:text-white transition-colors cursor-pointer">
+        <SkipBack size={18} />
+      </button>
+      
+      <button id="music-playpause" class="text-zinc-300 hover:text-white transition-colors cursor-pointer">
+        <span id="icon-play" class="block"><Play size={18} /></span>
+        <span id="icon-pause" class="hidden"><Pause size={18} /></span>
+      </button>
+      
+      <button id="music-next" class="text-zinc-300 hover:text-white transition-colors cursor-pointer">
+        <SkipForward size={18} />
+      </button>
+
+      <div class="flex flex-col flex-1 min-w-0 ml-1">
+        <span class="text-[10px] text-lime-400 font-mono font-bold leading-none mb-0.5">NOW PLAYING</span>
+        <span id="music-title" class="text-xs text-zinc-300 font-mono truncate leading-none">Loading...</span>
+      </div>
+    </div>
+  </div>
+
+  <audio id="global-audio" preload="auto" loop muted></audio>
+</div>
+
+<script define:vars={{ tracks }}>
+  // Since Astro uses ViewTransitions, this script will run once on initial load, 
+  // but we need to ensure listeners are bound correctly if we re-execute.
+  // Using an IIFE to keep namespace clean.
+  (function initMusicPlayer() {
+    // If the audio element is already playing (from a previous page via persist), don't re-initialize state.
+    if (window.musicPlayerInitialized) return;
+    window.musicPlayerInitialized = true;
+
+    let currentTrackIndex = Math.floor(Math.random() * tracks.length);
+    let isPlaying = false;
+    let isMuted = true;
+    let isExpanded = false; // Mobile expanded state
+
+    const audio = document.getElementById("global-audio");
+    const container = document.getElementById("music-player-container");
+    const controls = document.getElementById("music-controls");
+    const titleEl = document.getElementById("music-title");
+
+    // Buttons
+    const muteToggle = document.getElementById("music-mute-toggle");
+    const playPauseBtn = document.getElementById("music-playpause");
+    const prevBtn = document.getElementById("music-prev");
+    const nextBtn = document.getElementById("music-next");
+    const mobileToggle = document.getElementById("music-mobile-toggle");
+
+    // Icons
+    const iconMuted = document.getElementById("icon-muted");
+    const iconUnmuted = document.getElementById("icon-unmuted");
+    const iconPlay = document.getElementById("icon-play");
+    const iconPause = document.getElementById("icon-pause");
+    const chevronLeft = document.getElementById("music-chevron-left");
+    const chevronRight = document.getElementById("music-chevron-right");
+
+    if (!audio) return;
+
+    // Initialize Audio
+    function loadTrack(index, autoPlay = true) {
+      const track = tracks[index];
+      audio.src = track.src;
+      titleEl.textContent = track.name;
+      if (autoPlay && !isMuted) {
+        audio.play().then(() => {
+          isPlaying = true;
+          updatePlayPauseUI();
+        }).catch(() => {
+          isPlaying = false;
+          updatePlayPauseUI();
+        });
+      }
+    }
+
+    // Attempt autoplay right away (will only work if muted, which it is by default)
+    loadTrack(currentTrackIndex, true);
+    // Force play since muted autoplay is allowed
+    audio.play().then(() => {
+      isPlaying = true;
+      updatePlayPauseUI();
+    }).catch(() => {});
+
+    function updateMuteUI() {
+      audio.muted = isMuted;
+      if (isMuted) {
+        iconMuted.classList.remove("hidden");
+        iconMuted.classList.add("block");
+        iconUnmuted.classList.remove("block");
+        iconUnmuted.classList.add("hidden");
+      } else {
+        iconMuted.classList.remove("block");
+        iconMuted.classList.add("hidden");
+        iconUnmuted.classList.remove("hidden");
+        iconUnmuted.classList.add("block");
+      }
+    }
+
+    function updatePlayPauseUI() {
+      if (isPlaying) {
+        iconPlay.classList.remove("block");
+        iconPlay.classList.add("hidden");
+        iconPause.classList.remove("hidden");
+        iconPause.classList.add("block");
+      } else {
+        iconPlay.classList.remove("hidden");
+        iconPlay.classList.add("block");
+        iconPause.classList.remove("block");
+        iconPause.classList.add("hidden");
+      }
+    }
+
+    muteToggle.addEventListener("click", () => {
+      isMuted = !isMuted;
+      updateMuteUI();
+      // If unmuting and not currently playing, start playing
+      if (!isMuted && !isPlaying) {
+        audio.play();
+        isPlaying = true;
+        updatePlayPauseUI();
+      }
+    });
+
+    playPauseBtn.addEventListener("click", () => {
+      if (isPlaying) {
+        audio.pause();
+        isPlaying = false;
+      } else {
+        audio.play();
+        isPlaying = true;
+        // If they explicitly press play, unmute automatically
+        if (isMuted) {
+          isMuted = false;
+          updateMuteUI();
+        }
+      }
+      updatePlayPauseUI();
+    });
+
+    nextBtn.addEventListener("click", () => {
+      currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+      loadTrack(currentTrackIndex, true);
+      // Auto-unmute on manual skip
+      if (isMuted) {
+        isMuted = false;
+        updateMuteUI();
+      }
+    });
+
+    prevBtn.addEventListener("click", () => {
+      currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+      loadTrack(currentTrackIndex, true);
+      if (isMuted) {
+        isMuted = false;
+        updateMuteUI();
+      }
+    });
+
+    // Mobile expand/collapse
+    mobileToggle.addEventListener("click", () => {
+      isExpanded = !isExpanded;
+      if (isExpanded) {
+        container.classList.remove("translate-x-[calc(100%-4.5rem)]");
+        container.classList.add("translate-x-0");
+        chevronLeft.classList.add("hidden");
+        chevronLeft.classList.remove("block");
+        chevronRight.classList.remove("hidden");
+        chevronRight.classList.add("block");
+      } else {
+        container.classList.add("translate-x-[calc(100%-4.5rem)]");
+        container.classList.remove("translate-x-0");
+        chevronLeft.classList.remove("hidden");
+        chevronLeft.classList.add("block");
+        chevronRight.classList.add("hidden");
+        chevronRight.classList.remove("block");
+      }
+    });
+
+    // Handle desktop hover sync for controls opacity
+    container.addEventListener("mouseenter", () => {
+      controls.classList.remove("opacity-0");
+      controls.classList.add("opacity-100");
+    });
+    
+    container.addEventListener("mouseleave", () => {
+      if (!isExpanded) { // Only fade out if not forced open on mobile
+        controls.classList.add("opacity-0");
+        controls.classList.remove("opacity-100");
+      }
+    });
+
+    // When a track finishes naturally, go to next
+    audio.addEventListener("ended", () => {
+      currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+      loadTrack(currentTrackIndex, true);
+    });
+
+  })();
+</script>

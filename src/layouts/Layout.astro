@@ -8,6 +8,7 @@ import Footer from "@components/footer.astro";
 import SmoothScrollIsland from "@components/SmoothScrollIsland";
 import ScrollToBottom from "@components/ScrollToBottom.astro";
 import BaseLayout from "./baseLayout.astro";
+import MusicPlayer from "@components/MusicPlayer.astro";
 // images
 import dustin from "@res/images/dustin.jpg";
 import { getSEOForPath } from "@utils/seoConfig";
@@ -73,7 +74,7 @@ const ogImageURL = seo.image?.src ? new URL(seo.image.src, Astro.site).toString(
         style="display:none;visibility:hidden"></iframe></noscript
     >
     <!-- End Google Tag Manager (noscript) -->
-    <Navigation />
+    <Navigation modernNav={true} />
     <!-- Twitter-style 2-column grid -->
     <div
       class="mx-auto flex flex-col lg:flex-row w-full max-w-[1265px] min-h-screen px-4 sm:px-6 lg:px-0 pb-24 lg:pb-0 pt-6 lg:pt-10"
@@ -135,5 +136,6 @@ const ogImageURL = seo.image?.src ? new URL(seo.image.src, Astro.site).toString(
     </div>
     <SmoothScrollIsland client:idle />
     <ScrollToBottom />
+    <MusicPlayer />
   </body>
 </html>

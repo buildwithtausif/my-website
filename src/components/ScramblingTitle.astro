@@ -1,0 +1,451 @@
+---
+type TransitionEffect = "scramble" | "upslide" | "downslide" | "braille" | "glitch" | "rgb-split" | "vaporise" | "ripple-dissolve" | "pixellate" | "strangerthings" | "alien";
+
+type FixedTitleDef = string | { text: string; effect?: TransitionEffect; renderFirst?: boolean };
+type FluidTitleDef = string | { effect?: TransitionEffect; texts: string[] } | { text: string; effect?: TransitionEffect };
+
+interface Props {
+  "data-fluid-title"?: string | Record<number, FluidTitleDef> | FluidTitleDef[];
+  "data-fluid-text"?: string | Record<number, FluidTitleDef> | FluidTitleDef[];
+  "data-fixed-title"?: FixedTitleDef;
+  "run-infinite"?: boolean | string;
+  "run-delay"?: number | string;
+  fluidOnNewLine?: boolean | string;
+  class?: string;
+  id?: string;
+  [key: string]: any;
+}
+
+const props = Astro.props;
+const fluidTitleRaw = props["data-fluid-title"] || props["data-fluid-text"];
+const fixedTitleRaw = props["data-fixed-title"] || "";
+const runInfinite = props["run-infinite"] !== undefined && props["run-infinite"] !== "false";
+const fluidOnNewLine = props.fluidOnNewLine !== undefined && props.fluidOnNewLine !== "false";
+const className = props.class || "";
+const id = props.id || "";
+
+let runCount = 1;
+let Tag = "h1";
+
+for (const key of Object.keys(props)) {
+  if (key.startsWith("heading-")) {
+    const num = parseInt(key.replace("heading-", ""));
+    if (!isNaN(num) && num >= 1 && num <= 6) {
+      Tag = `h${num}`;
+    }
+  } else if (key.startsWith("run-") && key !== "run-infinite" && key !== "run-delay") {
+    const num = parseInt(key.replace("run-", ""));
+    if (!isNaN(num)) {
+      runCount = num;
+    }
+  }
+}
+
+const runDelay = props["run-delay"] !== undefined ? Number(props["run-delay"]) : 2000;
+
+interface TitleItem {
+  text: string;
+  effect: string;
+}
+
+let fluidTitles: TitleItem[] = [];
+if (typeof fluidTitleRaw === "string") {
+  fluidTitles = [{ text: fluidTitleRaw, effect: "scramble" }];
+} else if (Array.isArray(fluidTitleRaw)) {
+  fluidTitles = fluidTitleRaw.map(t => {
+    if (typeof t === "string") return { text: t, effect: "scramble" };
+    if (typeof t === "object" && t !== null && t.text) return { text: t.text, effect: t.effect || "scramble" };
+    return { text: "", effect: "scramble" };
+  });
+} else if (typeof fluidTitleRaw === "object" && fluidTitleRaw !== null) {
+  const keys = Object.keys(fluidTitleRaw).map(Number).sort((a, b) => a - b);
+  for (const k of keys) {
+    const item = (fluidTitleRaw as any)[k];
+    if (typeof item === "string") {
+      fluidTitles.push({ text: item, effect: "scramble" });
+    } else if (typeof item === "object" && item !== null && item.effect && Array.isArray(item.texts)) {
+      item.texts.forEach((t: string) => {
+        fluidTitles.push({ text: t, effect: item.effect });
+      });
+    } else if (typeof item === "object" && item !== null && item.text) {
+      fluidTitles.push({ text: item.text, effect: item.effect || "scramble" });
+    }
+  }
+}
+
+let fixedTitleObj = { text: "", effect: "", renderFirst: false };
+if (typeof fixedTitleRaw === "string") {
+  fixedTitleObj = { text: fixedTitleRaw, effect: "", renderFirst: false };
+} else if (typeof fixedTitleRaw === "object" && fixedTitleRaw !== null) {
+  fixedTitleObj = { 
+    text: fixedTitleRaw.text || "", 
+    effect: fixedTitleRaw.effect || "",
+    renderFirst: !!fixedTitleRaw.renderFirst
+  };
+}
+
+const dataAttributes = {
+  "data-fluid-titles": JSON.stringify(fluidTitles),
+  "data-run-infinite": runInfinite.toString(),
+  "data-run-count": runCount.toString(),
+  "data-run-delay": runDelay.toString(),
+  "data-fixed-text": fixedTitleObj.text,
+  "data-fixed-effect": fixedTitleObj.effect,
+  "data-fixed-render-first": fixedTitleObj.renderFirst.toString(),
+};
+
+// Filter out custom props so they aren't rendered as HTML attributes
+const htmlProps = { ...props };
+delete htmlProps["data-fluid-title"];
+delete htmlProps["data-fluid-text"];
+delete htmlProps["data-fixed-title"];
+delete htmlProps["run-infinite"];
+delete htmlProps["run-delay"];
+delete htmlProps.fluidOnNewLine;
+delete htmlProps.class;
+delete htmlProps.id;
+Object.keys(htmlProps).forEach(key => {
+  if (key.startsWith("heading-") || key.startsWith("run-")) {
+    delete htmlProps[key];
+  }
+});
+---
+
+<svg width="0" height="0" class="absolute pointer-events-none">
+  <defs>
+    <filter id="ripple-filter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="1" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+    <filter id="pixelate-filter" x="0" y="0">
+      <feTurbulence type="fractalNoise" baseFrequency="0.2" numOctaves="1" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G" />
+      <feComponentTransfer>
+        <feFuncA type="discrete" tableValues="0 1"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+</svg>
+
+<Tag class={`scrambling-container ${className} wrap-break-word`} id={id} {...dataAttributes} {...htmlProps}>
+  {fixedTitleObj.text && <span class="fixed-text whitespace-pre-wrap">{fixedTitleObj.text}</span>}
+  <span class={`fluid-text whitespace-pre-wrap ${fluidOnNewLine ? 'block' : ''}`}></span>
+</Tag>
+
+<style>
+  /* upslide */
+  .effect-upslide-exit { animation: upslide-out 0.4s ease forwards; }
+  .effect-upslide-enter { animation: upslide-in 0.5s ease forwards; }
+  @keyframes upslide-out { to { transform: translateY(-20px); opacity: 0; } }
+  @keyframes upslide-in { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  /* downslide */
+  .effect-downslide-exit { animation: downslide-out 0.4s ease forwards; }
+  .effect-downslide-enter { animation: downslide-in 0.5s ease forwards; }
+  @keyframes downslide-out { to { transform: translateY(20px); opacity: 0; } }
+  @keyframes downslide-in { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  /* glitch */
+  .effect-glitch-exit { opacity: 0; transition: opacity 0.2s; }
+  .effect-glitch-enter {
+    animation: glitch-skew 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    position: relative;
+    display: inline-block;
+  }
+  .effect-glitch-enter::before, .effect-glitch-enter::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+  }
+  .effect-glitch-enter::before {
+    left: 2px; text-shadow: -2px 0 red;
+    animation: glitch-anim 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+  }
+  .effect-glitch-enter::after {
+    left: -2px; text-shadow: -2px 0 blue;
+    animation: glitch-anim2 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+    clip-path: polygon(0 80%, 100% 20%, 100% 100%, 0 100%);
+  }
+
+  @keyframes glitch-skew {
+    0% { transform: skew(0deg); }
+    20% { transform: skew(-20deg); }
+    40% { transform: skew(20deg); }
+    60% { transform: skew(-10deg); }
+    80% { transform: skew(10deg); }
+    100% { transform: skew(0deg); }
+  }
+  @keyframes glitch-anim {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 1px); }
+    40% { transform: translate(-1px, -1px); }
+    60% { transform: translate(2px, 1px); }
+    80% { transform: translate(1px, -1px); }
+    100% { transform: translate(0); }
+  }
+  @keyframes glitch-anim2 {
+    0% { transform: translate(0); }
+    20% { transform: translate(2px, -1px); }
+    40% { transform: translate(1px, 1px); }
+    60% { transform: translate(-2px, -1px); }
+    80% { transform: translate(-1px, 1px); }
+    100% { transform: translate(0); }
+  }
+
+  /* rgb-split */
+  .effect-rgb-split-exit { opacity: 0; transition: opacity 0.2s; }
+  .effect-rgb-split-enter { animation: rgb-split-anim 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+  @keyframes rgb-split-anim {
+    0% { text-shadow: -15px 0 0 red, 15px 0 0 blue, 0 0 0 lime; filter: blur(2px); opacity: 0; transform: scale(1.05); }
+    50% { text-shadow: 8px 0 0 red, -8px 0 0 blue, 0 0 0 lime; filter: blur(1px); opacity: 1; transform: scale(1); }
+    100% { text-shadow: 0 0 0 red, 0 0 0 blue, 0 0 0 lime; filter: blur(0); }
+  }
+
+  /* vaporise */
+  .effect-vaporise-exit { animation: vaporise-out 0.5s forwards; }
+  .effect-vaporise-enter { animation: vaporise-in 0.8s forwards; }
+  @keyframes vaporise-out { to { opacity: 0; filter: blur(12px); transform: scale(1.1) translateY(-10px); } }
+  @keyframes vaporise-in { from { opacity: 0; filter: blur(12px); transform: scale(0.9) translateY(10px); } to { opacity: 1; filter: blur(0); transform: scale(1) translateY(0); } }
+
+  /* ripple-dissolve */
+  .effect-ripple-dissolve-exit { animation: ripple-out 0.5s forwards; filter: url(#ripple-filter); }
+  .effect-ripple-dissolve-enter { animation: ripple-in 0.8s forwards; filter: url(#ripple-filter); }
+  @keyframes ripple-out { to { opacity: 0; filter: blur(4px) url(#ripple-filter); } }
+  @keyframes ripple-in { from { opacity: 0; filter: blur(4px) url(#ripple-filter); } to { opacity: 1; filter: blur(0); } }
+
+  /* pixellate */
+  .effect-pixellate-exit { animation: pixellate-out 0.5s forwards; filter: url(#pixelate-filter); }
+  .effect-pixellate-enter { animation: pixellate-in 0.8s forwards; filter: url(#pixelate-filter); }
+  @keyframes pixellate-out { to { opacity: 0; filter: blur(5px) url(#pixelate-filter); } }
+  @keyframes pixellate-in { from { opacity: 0; filter: blur(5px) url(#pixelate-filter); } to { opacity: 1; filter: blur(0); } }
+
+  /* strangerthings */
+  .effect-strangerthings-exit { animation: stranger-out 0.6s forwards; }
+  .effect-strangerthings-enter { 
+    animation: stranger-in 2.5s forwards; 
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 1.5px #ff0000;
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+    text-transform: uppercase;
+  }
+  @keyframes stranger-out { to { opacity: 0; transform: scale(1.5); filter: blur(5px); } }
+  @keyframes stranger-in { 
+    from { opacity: 0; letter-spacing: -10px; transform: scale(0.8); filter: blur(5px); } 
+    to { opacity: 1; letter-spacing: 5px; transform: scale(1); filter: blur(0); } 
+  }
+
+  /* alien */
+  .alien-active { 
+    color: #84cc16 !important; 
+    text-shadow: 0 0 15px #84cc16, 0 0 30px #84cc16; 
+    font-weight: 900;
+  }
+  .alien-active span {
+    display: inline-block;
+    animation: alien-spin 0.2s steps(4) infinite;
+  }
+  @keyframes alien-spin {
+    to { transform: rotate(360deg); }
+  }
+  .alien-flash { 
+    animation: alien-flash-anim 0.8s ease-out forwards; 
+  }
+  @keyframes alien-flash-anim {
+    0% { filter: brightness(1) contrast(1); }
+    20% { 
+      filter: brightness(5) contrast(2) drop-shadow(0 0 50px #84cc16); 
+      color: #fff !important; 
+    }
+    100% { filter: brightness(1) contrast(1); }
+  }
+</style>
+
+<script>
+  class Scrambler {
+    element: HTMLElement;
+    titles: { text: string; effect: string }[];
+    options: { infinite: boolean; count: number; delay: number; renderFirst?: boolean };
+    chars: string;
+    currentCharSet: string;
+    queue: { from: string; to: string; start: number; end: number; char?: string }[];
+    frameRequest: number;
+    frame: number;
+    titleIndex: number;
+    runCount: number;
+    resolve: ((value: unknown) => void) | null;
+
+    constructor(element: HTMLElement, titles: { text: string; effect: string }[], options: { infinite: boolean; count: number; delay: number; renderFirst?: boolean }) {
+      this.element = element;
+      this.titles = titles;
+      this.options = options;
+      this.chars = '!<>-_\\/[]{}—=+*^?#________';
+      this.currentCharSet = this.chars;
+      this.queue = [];
+      this.frameRequest = 0;
+      this.frame = 0;
+      this.titleIndex = 0;
+      this.runCount = 0;
+      this.resolve = null;
+      this.update = this.update.bind(this);
+      
+      if (this.titles.length > 0) {
+        if (this.options.renderFirst) {
+          this.element.innerText = "";
+          this.titleIndex = -1;
+        } else {
+          this.element.innerText = this.titles[0].text;
+        }
+      }
+    }
+
+    setText(newText: string, charSet: string = this.chars) {
+      this.currentCharSet = charSet;
+      const oldText = this.element.innerText;
+      const length = Math.max(oldText.length, newText.length);
+      const promise = new Promise((resolve) => this.resolve = resolve);
+      this.queue = [];
+      for (let i = 0; i < length; i++) {
+        const from = oldText[i] || '';
+        const to = newText[i] || '';
+        const start = Math.floor(Math.random() * 40);
+        const end = start + Math.floor(Math.random() * 40);
+        this.queue.push({ from, to, start, end });
+      }
+      cancelAnimationFrame(this.frameRequest);
+      this.frame = 0;
+      this.update();
+      return promise;
+    }
+
+    update() {
+      let output = '';
+      let complete = 0;
+      for (let i = 0, n = this.queue.length; i < n; i++) {
+        let { from, to, start, end, char } = this.queue[i];
+        if (this.frame >= end) {
+          complete++;
+          output += to;
+        } else if (this.frame >= start) {
+          if (!char || Math.random() < 0.28) {
+            char = this.currentCharSet[Math.floor(Math.random() * this.currentCharSet.length)];
+            this.queue[i].char = char;
+          }
+          output += `<span class="opacity-50">${char}</span>`;
+        } else {
+          output += from;
+        }
+      }
+      this.element.innerHTML = output;
+      if (complete === this.queue.length) {
+        if (this.resolve) this.resolve(null);
+      } else {
+        this.frameRequest = requestAnimationFrame(this.update);
+        this.frame++;
+      }
+    }
+
+    async runEffect(newText: string, effect: string) {
+      this.element.className = this.element.className.replace(/effect-[^\s]+/g, '').replace('alien-active', '').replace('alien-flash', '').trim();
+      this.element.setAttribute('data-text', newText);
+
+      if (effect === 'scramble' || !effect) {
+        await this.setText(newText, this.chars);
+      } else if (effect === 'braille') {
+        let brailleChars = '';
+        for (let i = 0x2800; i <= 0x28FF; i++) brailleChars += String.fromCharCode(i);
+        await this.setText(newText, brailleChars);
+      } else if (effect === 'alien') {
+        const alienChars = '◒◓◧◨◩◪▤▥▦▧▨▩▪▫▬▭▮▯▰▱▲△▶▷▼▽◀◁◆◇◈◉◊○◎●◐◑◘◙◢◣◤◥◦◫◬◭◮◯◰◱◲◳◴◵◶◷';
+        this.element.classList.add('alien-active');
+        await this.setText(newText, alienChars);
+        this.element.classList.remove('alien-active');
+        this.element.classList.add('alien-flash');
+        setTimeout(() => this.element.classList.remove('alien-flash'), 800);
+      } else {
+        this.element.classList.add(`effect-${effect}-exit`);
+        await new Promise(r => setTimeout(r, 500));
+        this.element.classList.remove(`effect-${effect}-exit`);
+        
+        this.element.innerHTML = newText;
+        
+        this.element.classList.add(`effect-${effect}-enter`);
+        await new Promise(r => setTimeout(r, effect === 'strangerthings' ? 2500 : 800));
+      }
+    }
+
+    async start() {
+      if (this.titles.length === 0) return;
+      
+      if (!this.options.renderFirst || this.titleIndex !== -1) {
+        await new Promise(r => setTimeout(r, this.options.delay));
+      }
+      
+      if (this.titles.length === 1 && !this.options.infinite) {
+        // Run once for single title (e.g. fixed text)
+        this.titleIndex = 0;
+        await this.runEffect(this.titles[0].text, this.titles[0].effect);
+        return;
+      }
+
+      while (true) {
+        this.titleIndex = (this.titleIndex + 1) % this.titles.length;
+        const current = this.titles[this.titleIndex];
+        
+        await this.runEffect(current.text, current.effect);
+        
+        if (this.titleIndex === this.titles.length - 1) {
+          this.runCount++;
+          if (!this.options.infinite && this.runCount >= this.options.count) {
+            break;
+          }
+        }
+        await new Promise(r => setTimeout(r, this.options.delay));
+      }
+    }
+  }
+
+  function initScramblers() {
+    const containers = document.querySelectorAll('.scrambling-container');
+    containers.forEach(container => {
+      if (container.hasAttribute('data-scrambler-initialized')) return;
+      container.setAttribute('data-scrambler-initialized', 'true');
+      
+      const fixedEl = container.querySelector('.fixed-text') as HTMLElement;
+      const fixedText = container.getAttribute('data-fixed-text');
+      const fixedEffect = container.getAttribute('data-fixed-effect');
+      const renderFirst = container.getAttribute('data-fixed-render-first') === 'true';
+
+      let fixedPromise = Promise.resolve();
+      if (fixedEl && fixedText && fixedEffect) {
+        const fixedScrambler = new Scrambler(fixedEl, [{ text: fixedText, effect: fixedEffect }], { infinite: false, count: 1, delay: 0, renderFirst: renderFirst });
+        fixedPromise = fixedScrambler.start();
+      }
+
+      const fluidEl = container.querySelector('.fluid-text') as HTMLElement;
+      if (!fluidEl) return;
+      
+      const titlesAttr = container.getAttribute('data-fluid-titles');
+      if (!titlesAttr) return;
+      
+      const titles = JSON.parse(titlesAttr);
+      const infinite = container.getAttribute('data-run-infinite') === 'true';
+      const count = parseInt(container.getAttribute('data-run-count') || '1', 10);
+      const delay = parseInt(container.getAttribute('data-run-delay') || '2000', 10);
+      
+      if (titles.length > 0) {
+        const scrambler = new Scrambler(fluidEl, titles, { infinite, count, delay, renderFirst });
+        if (renderFirst && fixedEffect) {
+          fixedPromise.then(() => scrambler.start());
+        } else {
+          scrambler.start();
+        }
+      }
+    });
+  }
+
+  initScramblers();
+  document.addEventListener('astro:page-load', initScramblers);
+</script>
