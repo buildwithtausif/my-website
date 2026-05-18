@@ -27,10 +27,6 @@ export const globalSEO: SEOProps = {
  * Add your specific page paths (without trailing slash) here.
  */
 export const pageSEOConfig: Record<string, Partial<SEOProps>> = {
-  // Home page uses the global defaults completely, but you can override here
-  "/": {
-    title: "Tausif Alam – Backend & Full Stack Developer",
-  },
   "/projects": {
     title: "Projects – Tausif Alam | Full Stack & Backend Work",
     desc: "Explore Tausif Alam’s projects, from backend systems to full stack apps built with Node.js, PostgreSQL, and modern web tech.",
