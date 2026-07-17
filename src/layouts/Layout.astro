@@ -8,7 +8,6 @@ import Footer from "@components/footer.astro";
 import SmoothScrollIsland from "@components/SmoothScrollIsland";
 import ScrollToBottom from "@components/ScrollToBottom.astro";
 import BaseLayout from "./baseLayout.astro";
-import MusicPlayer from "@components/MusicPlayer.astro";
 // images
 import dustin from "@res/images/dustin.jpg";
 import { getSEOForPath } from "@utils/seoConfig";
@@ -136,6 +135,5 @@ const ogImageURL = seo.image?.src ? new URL(seo.image.src, Astro.site).toString(
     </div>
     <SmoothScrollIsland client:idle />
     <ScrollToBottom />
-    <MusicPlayer />
   </body>
 </html>

@@ -3,8 +3,6 @@ import "../styles/global.css";
 import Navigation from "@components/navigation.astro";
 import { getSEOForPath } from "@utils/seoConfig";
 import BaseLayout from "./baseLayout.astro";
-import MusicPlayer from "@components/MusicPlayer.astro";
-
 const seo = getSEOForPath(Astro.url.pathname);
 
 interface Props {
@@ -70,6 +68,5 @@ const ogImageURL = image?.src ? new URL(image.src, Astro.site).toString() : unde
     <div class="content-wrapper w-full min-h-screen">
       <slot />
     </div>
-    <MusicPlayer />
   </body>
 </html>

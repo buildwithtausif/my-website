@@ -1,5 +1,14 @@
 ---
-import { VolumeX, Volume2, Play, Pause, SkipForward, SkipBack, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  VolumeX,
+  Volume2,
+  Play,
+  Pause,
+  SkipForward,
+  SkipBack,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 import audio1 from "@res/audio/clavier-music-reading-soft-piano-221781.mp3";
 import audio2 from "@res/audio/leberch-space-440026.mp3";
@@ -18,15 +27,20 @@ const tracks = [
   class="fixed bottom-24 right-0 z-50 flex items-center transition-transform duration-500 translate-x-[calc(100%-4.5rem)] hover:translate-x-0 md:translate-x-[calc(100%-3rem)]"
 >
   {/* Main Pill */}
-  <div class="bg-stone-900/70 backdrop-blur-2xl border border-white/10 rounded-l-3xl rounded-r-none flex items-center p-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.5)] h-12">
-    
+  <div
+    class="bg-stone-900/70 backdrop-blur-2xl border border-white/10 rounded-l-3xl rounded-r-none flex items-center p-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.5)] h-12"
+  >
     {/* Mobile pull tab (part of the pill) */}
     <button
       id="music-mobile-toggle"
       class="md:hidden flex items-center justify-center w-6 h-full text-zinc-300 hover:text-white transition-colors shrink-0 cursor-pointer"
     >
-      <span id="music-chevron-left" class="block"><ChevronLeft size={18} /></span>
-      <span id="music-chevron-right" class="hidden"><ChevronRight size={18} /></span>
+      <span id="music-chevron-left" class="block"
+        ><ChevronLeft size={18} /></span
+      >
+      <span id="music-chevron-right" class="hidden"
+        ><ChevronRight size={18} /></span
+      >
     </button>
 
     {/* Mute/Unmute Button (Always visible on edge) */}
@@ -39,23 +53,42 @@ const tracks = [
     </button>
 
     {/* Expanded Controls */}
-    <div class="flex items-center gap-3 px-4 w-48 opacity-0 transition-opacity duration-300" id="music-controls">
-      <button id="music-prev" class="text-zinc-300 hover:text-white transition-colors cursor-pointer">
+    <div
+      class="flex items-center gap-3 px-4 w-48 opacity-0 transition-opacity duration-300"
+      id="music-controls"
+    >
+      <button
+        id="music-prev"
+        class="text-zinc-300 hover:text-white transition-colors cursor-pointer"
+      >
         <SkipBack size={18} />
       </button>
-      
-      <button id="music-playpause" class="text-zinc-300 hover:text-white transition-colors cursor-pointer">
+
+      <button
+        id="music-playpause"
+        class="text-zinc-300 hover:text-white transition-colors cursor-pointer"
+      >
         <span id="icon-play" class="block"><Play size={18} /></span>
         <span id="icon-pause" class="hidden"><Pause size={18} /></span>
       </button>
-      
-      <button id="music-next" class="text-zinc-300 hover:text-white transition-colors cursor-pointer">
+
+      <button
+        id="music-next"
+        class="text-zinc-300 hover:text-white transition-colors cursor-pointer"
+      >
         <SkipForward size={18} />
       </button>
 
       <div class="flex flex-col flex-1 min-w-0 ml-1">
-        <span class="text-[10px] text-lime-400 font-mono font-bold leading-none mb-0.5">NOW PLAYING</span>
-        <span id="music-title" class="text-xs text-zinc-300 font-mono truncate leading-none">Loading...</span>
+        <span
+          class="text-[10px] text-lime-400 font-mono font-bold leading-none mb-0.5"
+          >NOW PLAYING</span
+        >
+        <span
+          id="music-title"
+          class="text-xs text-zinc-300 font-mono truncate leading-none"
+          >Loading...</span
+        >
       </div>
     </div>
   </div>
@@ -64,7 +97,7 @@ const tracks = [
 </div>
 
 <script define:vars={{ tracks }}>
-  // Since Astro uses ViewTransitions, this script will run once on initial load, 
+  // Since Astro uses ViewTransitions, this script will run once on initial load,
   // but we need to ensure listeners are bound correctly if we re-execute.
   // Using an IIFE to keep namespace clean.
   (function initMusicPlayer() {
@@ -73,7 +106,7 @@ const tracks = [
     window.musicPlayerInitialized = true;
 
     let currentTrackIndex = Math.floor(Math.random() * tracks.length);
-    let isPlaying = false;
+    let isPlaying = true;
     let isMuted = true;
     let isExpanded = false; // Mobile expanded state
 
@@ -105,23 +138,29 @@ const tracks = [
       audio.src = track.src;
       titleEl.textContent = track.name;
       if (autoPlay && !isMuted) {
-        audio.play().then(() => {
-          isPlaying = true;
-          updatePlayPauseUI();
-        }).catch(() => {
-          isPlaying = false;
-          updatePlayPauseUI();
-        });
+        audio
+          .play()
+          .then(() => {
+            isPlaying = true;
+            updatePlayPauseUI();
+          })
+          .catch(() => {
+            isPlaying = false;
+            updatePlayPauseUI();
+          });
       }
     }
 
     // Attempt autoplay right away (will only work if muted, which it is by default)
     loadTrack(currentTrackIndex, true);
     // Force play since muted autoplay is allowed
-    audio.play().then(() => {
-      isPlaying = true;
-      updatePlayPauseUI();
-    }).catch(() => {});
+    audio
+      .play()
+      .then(() => {
+        isPlaying = true;
+        updatePlayPauseUI();
+      })
+      .catch(() => {});
 
     function updateMuteUI() {
       audio.muted = isMuted;
@@ -190,7 +229,8 @@ const tracks = [
     });
 
     prevBtn.addEventListener("click", () => {
-      currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+      currentTrackIndex =
+        (currentTrackIndex - 1 + tracks.length) % tracks.length;
       loadTrack(currentTrackIndex, true);
       if (isMuted) {
         isMuted = false;
@@ -223,9 +263,10 @@ const tracks = [
       controls.classList.remove("opacity-0");
       controls.classList.add("opacity-100");
     });
-    
+
     container.addEventListener("mouseleave", () => {
-      if (!isExpanded) { // Only fade out if not forced open on mobile
+      if (!isExpanded) {
+        // Only fade out if not forced open on mobile
         controls.classList.add("opacity-0");
         controls.classList.remove("opacity-100");
       }
@@ -236,6 +277,5 @@ const tracks = [
       currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
       loadTrack(currentTrackIndex, true);
     });
-
   })();
 </script>

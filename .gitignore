@@ -25,3 +25,5 @@ pnpm-debug.log*
 
 # ignore obsidian files
 src/content/.obsidian
+.vercel
+.env*.local
